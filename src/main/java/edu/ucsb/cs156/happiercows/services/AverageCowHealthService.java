@@ -15,18 +15,18 @@ public class AverageCowHealthService {
     public Double getAverageCowHealth(Long commonsId) {
         Iterable<UserCommons> userCommonsList = userCommonsRepository.findByCommonsId(commonsId);
         Double totalHealth = 0.0;
-        int count = 0;
+        int totalCows = 0;
 
         for(UserCommons userCommons: userCommonsList){
-            totalHealth += userCommons.getCowHealth();
-            count+=1;
+            totalHealth += userCommons.getCowHealth() * userCommons.getNumOfCows();
+            totalCows += userCommons.getNumOfCows();
         }
 
-        if(count == 0){
+        if(!userCommonsList.iterator().hasNext()){
             throw new IllegalArgumentException("Unable to get average cow health");
         }
 
-        return totalHealth / count;
+        return totalCows == 0 ? 0 :totalHealth / totalCows;
 
 
     }

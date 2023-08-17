@@ -48,11 +48,18 @@ public class AverageCowHealthServiceTest {
       .fullName("watermelon")
       .email("watermelon@example.org")
       .build();
+    
+    private User user3 = User
+      .builder()
+      .id(43L)
+      .fullName("zero")
+      .email("zero@example.org")
+      .build();
 
-  private Commons commons = Commons
+  private Commons commons_1 = Commons
       .builder()
       .id(17L)
-      .name("test commons")
+      .name("test commons 1")
       .cowPrice(10)
       .milkPrice(2)
       .startingBalance(300)
@@ -64,11 +71,26 @@ public class AverageCowHealthServiceTest {
       .aboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear)
       .build();
 
+    private Commons commons_2 = Commons
+      .builder()
+      .id(18L)
+      .name("test commons 2")
+      .cowPrice(10)
+      .milkPrice(2)
+      .startingBalance(300)
+      .startingDate(LocalDateTime.parse("2022-03-05T15:50:11"))
+      .showLeaderboard(true)
+      .carryingCapacity(100)
+      .degradationRate(0.01)
+      .belowCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear)
+      .aboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear)
+      .build();
+
   UserCommons uc_1 = UserCommons
       .builder()
       .user(user1)
       .username("Chris Gaucho")
-      .commons(commons)
+      .commons(commons_1)
       .totalWealth(300)
       .numOfCows(123)
       .cowHealth(10)
@@ -81,9 +103,23 @@ public class AverageCowHealthServiceTest {
       .builder()
       .user(user2)
       .username("watermelon")
-      .commons(commons)
+      .commons(commons_1)
       .totalWealth(100)
       .numOfCows(70)
+      .cowHealth(8)
+      .cowsBought(30)
+      .cowsSold(10)
+      .cowDeaths(7)
+      .build();
+
+    
+    UserCommons uc_3 = UserCommons
+      .builder()
+      .user(user3)
+      .username("watermelon")
+      .commons(commons_2)
+      .totalWealth(100)
+      .numOfCows(0)
       .cowHealth(8)
       .cowsBought(30)
       .cowsSold(10)
@@ -92,8 +128,9 @@ public class AverageCowHealthServiceTest {
     
     @BeforeEach
     void setup() {
-        uc_1.setId(new UserCommonsKey(user1.getId(), commons.getId()));
-        uc_2.setId(new UserCommonsKey(user2.getId(), commons.getId()));
+        uc_1.setId(new UserCommonsKey(user1.getId(), commons_1.getId()));
+        uc_2.setId(new UserCommonsKey(user2.getId(), commons_1.getId()));
+        uc_3.setId(new UserCommonsKey(user3.getId(), commons_2.getId()));
     }
 
     @Test
@@ -102,7 +139,7 @@ public class AverageCowHealthServiceTest {
 
         Double avgHealth = averageCowHealthService.getAverageCowHealth(17L);
         
-        Assertions.assertEquals(9.0, avgHealth);
+        Assertions.assertEquals(1790.0/193.0, avgHealth);
 
     }
 
@@ -117,5 +154,14 @@ public class AverageCowHealthServiceTest {
         String message = thrown.getMessage();
         String expectedMessage = "Unable to get average cow health";
         Assertions.assertTrue(message.contains(expectedMessage), String.format("Expected message to contain \"%s\" but was \"%s\"", expectedMessage, message));
+    }
+
+    @Test
+    void testGetAverageCowHealth_zeroCows(){
+        when(userCommonsRepository.findByCommonsId(18L)).thenReturn(Arrays.asList(uc_3));
+
+        Double avgHealth = averageCowHealthService.getAverageCowHealth(18L);
+        
+        Assertions.assertEquals(0, avgHealth);
     }
 }
