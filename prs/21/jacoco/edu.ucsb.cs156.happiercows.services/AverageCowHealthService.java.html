@@ -15,18 +15,18 @@ import edu.ucsb.cs156.happiercows.repositories.UserCommonsRepository;
     public Double getAverageCowHealth(Long commonsId) {
 <span class="fc" id="L16">        Iterable&lt;UserCommons&gt; userCommonsList = userCommonsRepository.findByCommonsId(commonsId);</span>
 <span class="fc" id="L17">        Double totalHealth = 0.0;</span>
-<span class="fc" id="L18">        int count = 0;</span>
+<span class="fc" id="L18">        int totalCows = 0;</span>
 
 <span class="fc bfc" id="L20" title="All 2 branches covered.">        for(UserCommons userCommons: userCommonsList){</span>
-<span class="fc" id="L21">            totalHealth += userCommons.getCowHealth();</span>
-<span class="fc" id="L22">            count+=1;</span>
+<span class="fc" id="L21">            totalHealth += userCommons.getCowHealth() * userCommons.getNumOfCows();</span>
+<span class="fc" id="L22">            totalCows += userCommons.getNumOfCows();</span>
 <span class="fc" id="L23">        }</span>
 
-<span class="fc bfc" id="L25" title="All 2 branches covered.">        if(count == 0){</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if(!userCommonsList.iterator().hasNext()){</span>
 <span class="fc" id="L26">            throw new IllegalArgumentException(&quot;Unable to get average cow health&quot;);</span>
         }
 
-<span class="fc" id="L29">        return totalHealth / count;</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        return totalCows == 0 ? 0 :totalHealth / totalCows;</span>
 
 
     }
