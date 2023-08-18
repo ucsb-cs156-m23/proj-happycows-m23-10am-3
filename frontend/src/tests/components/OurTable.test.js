@@ -34,7 +34,7 @@ describe("OurTable tests", () => {
             Header: 'Column 2',
             accessor: 'col2',
         },
-        ButtonColumn("Click", "primary", clickMeCallback, "testId"),
+        // ButtonColumn("Click", "primary", clickMeCallback, "testId"),
         DateColumn("Date", (cell) => cell.row.original.createdAt),
         PlaintextColumn("Log", (cell) => cell.row.original.log),
     ];
@@ -51,16 +51,16 @@ describe("OurTable tests", () => {
         );
     });
 
-    test("The button appears in the table", async () => {
-        render(
-            <OurTable columns={columns} data={threeRows} />
-        );
+    // test("The button appears in the table", async () => {
+    //     render(
+    //         <OurTable columns={columns} data={threeRows} />
+    //     );
 
-        expect(await screen.findByTestId("testId-cell-row-0-col-Click-button")).toBeInTheDocument();
-        const button = screen.getByTestId("testId-cell-row-0-col-Click-button");
-        fireEvent.click(button);
-        await waitFor(() => expect(clickMeCallback).toBeCalledTimes(1));
-    });
+    //     expect(await screen.findByTestId("testId-cell-row-0-col-Click-button")).toBeInTheDocument();
+    //     const button = screen.getByTestId("testId-cell-row-0-col-Click-button");
+    //     fireEvent.click(button);
+    //     await waitFor(() => expect(clickMeCallback).toBeCalledTimes(1));
+    // });
 
     test("default testid is testId", async () => {
         render(

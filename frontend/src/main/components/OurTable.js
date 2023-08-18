@@ -1,7 +1,8 @@
-import React from "react";
+import { useState } from 'react';
 import { useTable, useSortBy } from 'react-table'
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Modal } from "react-bootstrap";
 import Plaintext from "main/components/Utils/Plaintext";
+
 // Stryker disable all
 var tableStyle = {
   "background": "white",
@@ -100,17 +101,48 @@ export default function OurTable({ columns, data, testid = "testid", ...rest }) 
 // ];
 
 export function ButtonColumn(label, variant, callback, testid) {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleDeleteClick = (cell) => {
+    handleShow();
+    console.log('Delete button clicked!');
+    callback(cell);
+  }
+
   const column = {
     Header: label,
     id: label,
     Cell: ({ cell }) => (
-      <Button
-        variant={variant}
-        onClick={() => callback(cell)}
-        data-testid={`${testid}-cell-row-${cell.row.index}-col-${cell.column.id}-button`}
-      >
-        {label}
-      </Button>
+      <>
+        <Button
+          variant={variant}
+          onClick={() => handleDeleteClick(cell)}
+          data-testid={`${testid}-cell-row-${cell.row.index}-col-${cell.column.id}-button`}
+        >
+          {label}
+        </Button>
+        <Modal
+          show={show}
+          onHide={handleClose} // Close the modal when requested
+        >
+          <Modal.Header closeButton>
+          <Modal.Title>Are you sure you want to delete this commons?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Click Yes if you want to delete this commons. Click No if you don't want to delete this commons.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Yes
+            </Button>
+            <Button variant="primary">No</Button>
+          </Modal.Footer>
+        </Modal>
+        
+      </>
     )
   }
   return column;
