@@ -116,6 +116,23 @@ export function ButtonColumn(label, variant, callback, testid) {
   return column;
 }
 
+export function DownloadButtonColumn(label, variant, testid) {
+  const column = {
+    Header: label,
+    id: label,
+    Cell: ({ cell }) => (
+      <Button
+        variant={variant}
+        href={`/api/commons/${cell.row.values["commons.id"]}/download?commonsId=${cell.row.values["commons.id"]}`} 
+        data-testid={`${testid}-cell-row-${cell.row.index}-col-${cell.column.id}-button`}
+      >
+        {label}
+      </Button>
+    )
+  }
+  return column;
+}
+
 export function PlaintextColumn(label, getText) {
   const column = {
     Header: label,

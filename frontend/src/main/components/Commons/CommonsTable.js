@@ -1,5 +1,5 @@
 import React from "react";
-import OurTable, {ButtonColumn} from "main/components/OurTable";
+import OurTable, {ButtonColumn, DownloadButtonColumn} from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 import { cellToAxiosParamsDelete, onDeleteSuccess } from "main/utils/commonsUtils"
 import { useNavigate } from "react-router-dom";
@@ -87,7 +87,9 @@ export default function CommonsTable({ commons, currentUser }) {
         ButtonColumn("Delete",
 "danger", deleteCallback, testid),
         ButtonColumn("Leaderboard",
-"secondary", leaderboardCallback, testid)
+"secondary", leaderboardCallback, testid),
+        DownloadButtonColumn("Download",
+"success", testid)   
     ];
 
     const columnsToDisplay = hasRole(currentUser,"ROLE_ADMIN") ? columnsIfAdmin : columns;
