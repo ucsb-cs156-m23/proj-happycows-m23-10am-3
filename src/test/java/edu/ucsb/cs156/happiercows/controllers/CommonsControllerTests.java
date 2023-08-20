@@ -341,6 +341,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(50.0)
                 .showLeaderboard(true)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .aboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Constant.name())
                 .belowCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear.name())
                 .build();
@@ -354,6 +355,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(50.0)
                 .showLeaderboard(true)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .aboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Constant)
                 .belowCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear)
                 .build();
@@ -380,6 +382,8 @@ public class CommonsControllerTests extends ControllerTestCase {
         commons.setShowLeaderboard(parameters.getShowLeaderboard());
         parameters.setCarryingCapacity(123);
         commons.setCarryingCapacity(parameters.getCarryingCapacity());
+        parameters.setCapacityPerUser(100);
+        commons.setCapacityPerUser(parameters.getCapacityPerUser());
         parameters.setAboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear.name());
         commons.setAboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear);
         parameters.setBelowCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Noop.name());
@@ -417,6 +421,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(50.0)
                 .showLeaderboard(true)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .build();
 
         Commons commons = Commons.builder()
@@ -428,6 +433,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(50.0)
                 .showLeaderboard(true)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .aboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Constant)
                 .belowCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.Linear)
                 .build();
@@ -469,6 +475,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(8.49)
                 .showLeaderboard(false)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .build();
 
         Commons commons = Commons.builder()
@@ -480,6 +487,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(8.49)
                 .showLeaderboard(false)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .build();
 
         String requestBody = objectMapper.writeValueAsString(parameters);
@@ -502,6 +510,8 @@ public class CommonsControllerTests extends ControllerTestCase {
         commons.setDegradationRate(parameters.getDegradationRate());
         parameters.setCarryingCapacity(123);
         commons.setCarryingCapacity(parameters.getCarryingCapacity());
+        parameters.setCapacityPerUser(100);
+        commons.setCapacityPerUser(parameters.getCapacityPerUser());
 
         requestBody = objectMapper.writeValueAsString(parameters);
 
@@ -535,6 +545,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(8.49)
                 .showLeaderboard(false)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .build();
 
         Commons commons = Commons.builder()
@@ -546,6 +557,7 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .degradationRate(8.49)
                 .showLeaderboard(false)
                 .carryingCapacity(100)
+                .capacityPerUser(50)
                 .build();
 
         String requestBody = objectMapper.writeValueAsString(parameters);
