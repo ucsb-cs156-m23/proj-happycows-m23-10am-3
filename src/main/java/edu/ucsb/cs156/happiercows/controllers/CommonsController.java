@@ -110,6 +110,7 @@ public class CommonsController extends ApiController {
         updated.setShowLeaderboard(params.getShowLeaderboard());
         updated.setDegradationRate(params.getDegradationRate());
         updated.setCarryingCapacity(params.getCarryingCapacity());
+        updated.setCapacityPerUser(params.getCapacityPerUser());
         if (params.getAboveCapacityHealthUpdateStrategy() != null) {
             updated.setAboveCapacityHealthUpdateStrategy(CowHealthUpdateStrategies.valueOf(params.getAboveCapacityHealthUpdateStrategy()));
         }
