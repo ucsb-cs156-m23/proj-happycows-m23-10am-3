@@ -1,5 +1,5 @@
 import React from "react";
-import OurTable, {ButtonColumn, DownloadButtonColumn} from "main/components/OurTable";
+import OurTable, {ButtonColumn} from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 import { cellToAxiosParamsDelete, onDeleteSuccess } from "main/utils/commonsUtils"
 import { useNavigate } from "react-router-dom";
@@ -26,6 +26,9 @@ export default function CommonsTable({ commons, currentUser }) {
     const leaderboardCallback = (cell) => {
         navigate(`/leaderboard/${cell.row.values["commons.id"]}`)
     }
+
+    const downloadCallback = (cell) => window.location.href = `/api/commons/${cell.row.values["commons.id"]}/download?commonsId=${cell.row.values["commons.id"]}`;
+
 
     const columns = [
         {
@@ -88,8 +91,8 @@ export default function CommonsTable({ commons, currentUser }) {
 "danger", deleteCallback, testid),
         ButtonColumn("Leaderboard",
 "secondary", leaderboardCallback, testid),
-        DownloadButtonColumn("Download",
-"success", testid)   
+        ButtonColumn("Download",
+"success", downloadCallback, testid)   
     ];
 
     const columnsToDisplay = hasRole(currentUser,"ROLE_ADMIN") ? columnsIfAdmin : columns;

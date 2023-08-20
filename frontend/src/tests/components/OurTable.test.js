@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import OurTable, {DownloadButtonColumn, ButtonColumn, DateColumn, PlaintextColumn} from "main/components/OurTable";
+import OurTable, { ButtonColumn, DateColumn, PlaintextColumn} from "main/components/OurTable";
 
 describe("OurTable tests", () => {
     const threeRows = [
@@ -8,14 +8,12 @@ describe("OurTable tests", () => {
             col2: 'World',
             createdAt: '2021-04-01T04:00:00.000',
             log: "foo\nbar\n  baz",
-            commons: { id: 10 }
         },
         {
             col1: 'react-table',
             col2: 'rocks',
             createdAt: '2022-01-04T14:00:00.000',
             log: "foo\nbar",
-            commons: { id: 11 }
 
         },
         {
@@ -23,7 +21,6 @@ describe("OurTable tests", () => {
             col2: 'you want',
             createdAt: '2023-04-01T23:00:00.000',
             log: "bar\n  baz",
-            commons: { id: 12 }
         }
     ];
     const clickMeCallback = jest.fn();
@@ -40,7 +37,6 @@ describe("OurTable tests", () => {
         ButtonColumn("Click", "primary", clickMeCallback, "testId"),
         DateColumn("Date", (cell) => cell.row.original.createdAt),
         PlaintextColumn("Log", (cell) => cell.row.original.log),
-        DownloadButtonColumn("Download", "success", "testId")
     ];
 
     test("renders an empty table without crashing", () => {
@@ -93,22 +89,4 @@ describe("OurTable tests", () => {
         fireEvent.click(col1Header);
         expect(await screen.findByText("🔽")).toBeInTheDocument();
     });
-
-    test("href in dowonload button", async () => {
-        render(
-            <OurTable columns={columns} data={threeRows}/>
-        );
-
-        expect(await screen.findByTestId("testId-cell-row-0-col-Download-button")).toBeInTheDocument();
-        const downloadButton = screen.getByTestId("testId-cell-row-0-col-Download-button");
-        
-        const href = downloadButton.getAttribute("href");
-        const cell = threeRows[0];
-
-
-        expect(href).toBe(`/api/commons/${cell["commons.id"]}/download?commonsId=${cell["commons.id"]}`)
-
-
-
-    })
 });
