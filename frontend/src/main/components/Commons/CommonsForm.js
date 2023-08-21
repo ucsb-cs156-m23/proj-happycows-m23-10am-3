@@ -220,12 +220,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                     </Form.Group>
                 </Col>
             </Row>
-
-
-
-
-
-
+            
             <Button type="submit" data-testid="CommonsForm-Submit-Button">{buttonLabel}</Button>
         </Form>
     );
