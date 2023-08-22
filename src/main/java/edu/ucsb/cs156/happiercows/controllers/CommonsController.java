@@ -169,7 +169,8 @@ public class CommonsController extends ApiController {
                 .startingDate(params.getStartingDate())
                 .degradationRate(params.getDegradationRate())
                 .showLeaderboard(params.getShowLeaderboard())
-                .carryingCapacity(params.getCarryingCapacity());
+                .carryingCapacity(params.getCarryingCapacity())
+                .capacityPerUser(params.getCapacityPerUser());
 
         // ok to set null values for these, so old backend still works
         if (params.getAboveCapacityHealthUpdateStrategy() != null) {
