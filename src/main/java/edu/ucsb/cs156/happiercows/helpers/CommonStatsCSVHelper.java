@@ -23,11 +23,12 @@ public class CommonStatsCSVHelper {
 
   private CommonStatsCSVHelper() {}
 
-  /**
-   * This method is a hack to avoid a jacoco issue; it isn't possible to 
-   * exclude an individual method call from jacoco coverage, but we can
-   * exclude the entire method.  
-   * @param out
+  /*
+   * This method is a hack to avoid a pitest issue; it isn't possible to 
+   * exclude an individual method call from pitest coverage, but we can
+   * exclude the entire method by name in the pitest settings in pom.xml
+   * @param out stream to close
+   * @param csvPrinter printer to close
    */
 
   public static void flush_and_close_noPitest(ByteArrayOutputStream out, CSVPrinter csvPrinter) throws IOException {
