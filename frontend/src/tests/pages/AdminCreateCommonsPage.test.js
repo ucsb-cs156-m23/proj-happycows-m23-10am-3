@@ -9,6 +9,10 @@ import {apiCurrentUserFixtures} from "fixtures/currentUserFixtures";
 import {systemInfoFixtures} from "fixtures/systemInfoFixtures";
 import healthUpdateStrategyListFixtures from "../../fixtures/healthUpdateStrategyListFixtures";
 
+const curr = new Date();
+const today = curr.toISOString().substring(0, 10);
+const onemonthfromtoday = new Date(curr.getFullYear(), curr.getMonth()+1, curr.getDate()).toISOString().substring(0, 10);
+
 const mockedNavigate = jest.fn();
 jest.mock('react-router-dom', () => {
     const originalModule = jest.requireActual('react-router-dom');
@@ -62,7 +66,8 @@ describe("AdminCreateCommonsPage tests", () => {
             "cowPrice": 10,
             "milkPrice": 5,
             "startingBalance": 500,
-            "startingDate": "2022-03-05T00:00:00",
+            "startingDate": "2023-08-20T00:00:00.000Z",
+            "endingDate": "2023-09-20T00:00:00.000Z",
             "degradationRate": 30.4,
             "carryingCapacity": 25,
             "aboveCapacityHealthUpdateStrategy": "strat2",
@@ -85,6 +90,7 @@ describe("AdminCreateCommonsPage tests", () => {
         const cowPriceField = screen.getByLabelText("Cow Price");
         const milkPriceField = screen.getByLabelText("Milk Price");
         const startDateField = screen.getByLabelText("Starting Date");
+        const endDateField = screen.getByLabelText("Ending Date");
         const degradationRateField = screen.getByLabelText("Degradation Rate");
         const carryingCapacityField = screen.getByLabelText("Carrying Capacity");
         const aboveCapacityHealthUpdateStrategyField = screen.getByLabelText("When above capacity");
@@ -96,7 +102,8 @@ describe("AdminCreateCommonsPage tests", () => {
         fireEvent.change(startingBalanceField, { target: { value: '500' } })
         fireEvent.change(cowPriceField, { target: { value: '10' } })
         fireEvent.change(milkPriceField, { target: { value: '5' } })
-        fireEvent.change(startDateField, { target: { value: '2022-03-05' } })
+        fireEvent.change(startDateField, { target: { value: "2023-08-20" } })
+        fireEvent.change(endDateField, { target: { value: "2023-09-20" } })
         fireEvent.change(degradationRateField, { target: { value: '30.4' } })
         fireEvent.change(carryingCapacityField, { target: { value: '25' } })
         fireEvent.change(showLeaderboardField, { target: { value: true } })
@@ -116,7 +123,8 @@ describe("AdminCreateCommonsPage tests", () => {
             startingBalance: 500,
             cowPrice: 10,
             milkPrice: 5,
-            startingDate: '2022-03-05T00:00:00.000Z', // [1]
+            startingDate: "2023-08-20T00:00:00.000Z", // [1]
+            endingDate: "2023-09-20T00:00:00.000Z",
             degradationRate: 30.4,
             carryingCapacity: 25,
             showLeaderboard: false,
@@ -129,7 +137,8 @@ describe("AdminCreateCommonsPage tests", () => {
         expect(mockToast).toBeCalledWith(<div>Commons successfully created!
             <br />id: 5
             <br />name: My New Commons
-            <br />startDate: 2022-03-05T00:00:00
+            <br />startDate: 2023-08-20T00:00:00.000Z
+            <br />endDate: 2023-09-20T00:00:00.000Z
             <br />cowPrice: 10
             <br />carryingCapacity: 25
         </div>);

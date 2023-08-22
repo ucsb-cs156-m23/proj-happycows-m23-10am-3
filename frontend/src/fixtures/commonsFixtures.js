@@ -1,10 +1,14 @@
+const curr = new Date();
+const today = curr.toISOString().substring(0, 10);
+const onemonthfromtoday = new Date(curr.getFullYear(), curr.getMonth()+1, curr.getDate()).toISOString().substring(0, 10);
 const commonsFixtures = {
     threeCommons: [
         {
             "id": 5,
             "name": "Seths Common",
             "day": 5,
-            "startingDate": "2022-03-05T15:50:10",
+            "startingDate": today,
+            "endingDate": onemonthfromtoday,
             "startingBalance": 1200.10,
             "totalPlayers": 50,
             "cowPrice": 15,
@@ -19,7 +23,8 @@ const commonsFixtures = {
             "id": 4,
             "name": "Kevin's Commons",
             "day": 5,
-            "startingDate": "2012-03-05T15:50:10",
+            "startingDate": today,
+            "endingDate": onemonthfromtoday,
             "startingBalance": 100.50,
             "totalPlayers": 50,
             "cowPrice": 15,
@@ -34,7 +39,8 @@ const commonsFixtures = {
             "id": 1,
             "name": "Anika's Commons",
             "day": 5,
-            "startingDate": "2026-03-05T15:50:10",
+            "startingDate": today,
+            "endingDate": onemonthfromtoday,
             "startingBalance": 200.50,
             "totalPlayers": 50,
             "cowPrice": 15,
@@ -52,7 +58,8 @@ const commonsFixtures = {
                 "id": 1,
                 "name": "Anika's Commons",
                 "day": 5,
-                "startingDate": "2025-03-05T15:50:10",
+                "startingDate": today,
+                "endingDate": onemonthfromtoday,
                 "startingBalance": 2000.50,
                 "totalPlayers": 50,
                 "cowPrice": 15,

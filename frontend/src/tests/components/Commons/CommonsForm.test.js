@@ -46,6 +46,7 @@ describe("CommonsForm tests", () => {
       /Cow Price/,
       /Milk Price/,
       /Starting Date/,
+      /Ending Date/,
       /Degradation Rate/,
       /Carrying Capacity/,
       /Show Leaderboard\?/,
@@ -79,20 +80,35 @@ describe("CommonsForm tests", () => {
       </QueryClientProvider>
     );
 
-    expect(await screen.findByTestId("CommonsForm-name")).toBeInTheDocument();
+    // Input empty values (necessary to test after implementing default values)
     const submitButton = screen.getByTestId("CommonsForm-Submit-Button");
+    const startingBalanceInput = screen.getByTestId("CommonsForm-startingBalance");
+    fireEvent.change(startingBalanceInput, { target: { value: "" } });
+    const cowPriceInput = screen.getByTestId("CommonsForm-cowPrice");
+    fireEvent.change(cowPriceInput, { target: { value: "" } });
+    const milkPriceInput = screen.getByTestId("CommonsForm-milkPrice");
+    fireEvent.change(milkPriceInput, { target: { value: "" } });
+    const startingDateInput = screen.getByTestId("CommonsForm-startingDate");
+    fireEvent.change(startingDateInput, { target: { value: "" } });
+    const endDateInput = screen.getByTestId("CommonsForm-endingDate");
+    fireEvent.change(endDateInput, { target: { value: "" } });
+    const degradationRateInput = screen.getByTestId("CommonsForm-degradationRate");
+    fireEvent.change(degradationRateInput, { target: { value: "" } });
+    const carryingCapacityInput = screen.getByTestId("CommonsForm-carryingCapacity");
+    fireEvent.change(carryingCapacityInput, { target: { value: "" } });
+    fireEvent.click(submitButton);
+
+    expect(await screen.findByTestId("CommonsForm-name")).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
     expect(screen.getByTestId("CommonsForm-Submit-Button")).toHaveTextContent("Create New Commons");
-
-
-    fireEvent.click(submitButton);
     expect(await screen.findByText(/commons name is required/i)).toBeInTheDocument();
     expect(screen.getByText(/starting balance is required/i)).toBeInTheDocument();
     expect(screen.getByText(/cow price is required/i)).toBeInTheDocument();
     expect(screen.getByText(/milk price is required/i)).toBeInTheDocument();
     expect(screen.getByText(/starting date is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/ending date is required/i)).toBeInTheDocument();
     expect(screen.getByText(/degradation rate is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/Carrying capacity is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/carrying capacity is required/i)).toBeInTheDocument();
 
     // check that each of the fields that has 
     // a validation error is marked as invalid
@@ -105,6 +121,7 @@ describe("CommonsForm tests", () => {
       "CommonsForm-cowPrice",
       "CommonsForm-milkPrice",
       "CommonsForm-startingDate",
+      "CommonsForm-endingDate",
       "CommonsForm-degradationRate",
       "CommonsForm-carryingCapacity",
     ].forEach(
