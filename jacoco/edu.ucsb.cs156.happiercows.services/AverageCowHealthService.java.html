@@ -7,26 +7,27 @@ import edu.ucsb.cs156.happiercows.entities.UserCommons;
 
 import edu.ucsb.cs156.happiercows.repositories.UserCommonsRepository;
 
-<span class="fc" id="L10">public class AverageCowHealthService {</span>
+@Service
+<span class="fc" id="L11">public class AverageCowHealthService {</span>
 
     @Autowired
     UserCommonsRepository userCommonsRepository;
 
     public Double getAverageCowHealth(Long commonsId) {
-<span class="fc" id="L16">        Iterable&lt;UserCommons&gt; userCommonsList = userCommonsRepository.findByCommonsId(commonsId);</span>
-<span class="fc" id="L17">        Double totalHealth = 0.0;</span>
-<span class="fc" id="L18">        int totalCows = 0;</span>
+<span class="fc" id="L17">        Iterable&lt;UserCommons&gt; userCommonsList = userCommonsRepository.findByCommonsId(commonsId);</span>
+<span class="fc" id="L18">        Double totalHealth = 0.0;</span>
+<span class="fc" id="L19">        int totalCows = 0;</span>
 
-<span class="fc bfc" id="L20" title="All 2 branches covered.">        for(UserCommons userCommons: userCommonsList){</span>
-<span class="fc" id="L21">            totalHealth += userCommons.getCowHealth() * userCommons.getNumOfCows();</span>
-<span class="fc" id="L22">            totalCows += userCommons.getNumOfCows();</span>
-<span class="fc" id="L23">        }</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        for(UserCommons userCommons: userCommonsList){</span>
+<span class="fc" id="L22">            totalHealth += userCommons.getCowHealth() * userCommons.getNumOfCows();</span>
+<span class="fc" id="L23">            totalCows += userCommons.getNumOfCows();</span>
+<span class="fc" id="L24">        }</span>
 
-<span class="fc bfc" id="L25" title="All 2 branches covered.">        if(!userCommonsList.iterator().hasNext()){</span>
-<span class="fc" id="L26">            throw new IllegalArgumentException(&quot;Unable to get average cow health&quot;);</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if(!userCommonsList.iterator().hasNext()){</span>
+<span class="fc" id="L27">            throw new IllegalArgumentException(&quot;Unable to get average cow health&quot;);</span>
         }
 
-<span class="fc bfc" id="L29" title="All 2 branches covered.">        return totalCows == 0 ? 0 :totalHealth / totalCows;</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        return totalCows == 0 ? 0 :totalHealth / totalCows;</span>
 
 
     }
