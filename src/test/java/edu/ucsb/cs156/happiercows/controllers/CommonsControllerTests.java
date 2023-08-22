@@ -267,6 +267,31 @@ public class CommonsControllerTests extends ControllerTestCase {
         assertEquals(actualCommons, expectedCommons);
     }
 
+    @WithMockUser(roles = {"USER"})
+    @Test
+    public void getCommonsEffectiveCapacityTest() throws Exception {
+        List<Commons> expectedCommons = new ArrayList<Commons>();
+        Commons Commons1 = Commons.builder()
+                .id(1L)
+                .name("TestCommons1")
+                .carryingCapacity(10)
+                .capacityPerUser(5)
+                .build();
+
+        expectedCommons.add(Commons1);
+        when(commonsRepository.findAll()).thenReturn(expectedCommons);
+        when(commonsRepository.getNumUsers(eq(1L))).thenReturn(Optional.of(3));
+        MvcResult response = mockMvc.perform(get("/api/commons/all").contentType("application/json"))
+                .andExpect(status().isOk()).andReturn();
+
+        verify(commonsRepository, times(1)).findAll();
+        expectedCommons.get(0).setEffectiveCapacity(15);
+        String responseString = response.getResponse().getContentAsString();
+        List<Commons> actualCommons = objectMapper.readValue(responseString, new TypeReference<List<Commons>>() {
+        });
+        assertEquals(actualCommons, expectedCommons);
+    }
+
     @WithMockUser(roles = {"ADMIN"})
     @Test
     public void updateCommonsTest() throws Exception {
@@ -619,6 +644,50 @@ public class CommonsControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = {"USER"})
     @Test
+    public void getCommonsEffectiveCapacity_CapacityPerUser() throws Exception {
+        Commons Commons1 = Commons.builder()
+                .name("TestCommons2")
+                .id(18L)
+                .carryingCapacity(10)
+                .capacityPerUser(5)
+                .build();
+
+        when(commonsRepository.findById(eq(18L))).thenReturn(Optional.of(Commons1));
+        when(commonsRepository.getNumUsers(eq(18L))).thenReturn(Optional.of(3));
+        MvcResult response = mockMvc.perform(get("/api/commons?id=18"))
+                .andExpect(status().isOk()).andReturn();
+
+        verify(commonsRepository, times(1)).findById(eq(18L));
+        Commons1.setEffectiveCapacity(15);
+        String expectedJson = mapper.writeValueAsString(Commons1);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = {"USER"})
+    @Test
+    public void getCommonsEffectiveCapacity_CarryingCapacity() throws Exception {
+        Commons Commons1 = Commons.builder()
+                .name("TestCommons2")
+                .id(18L)
+                .carryingCapacity(20)
+                .capacityPerUser(5)
+                .build();
+
+        when(commonsRepository.findById(eq(18L))).thenReturn(Optional.of(Commons1));
+        when(commonsRepository.getNumUsers(eq(18L))).thenReturn(Optional.of(3));
+        MvcResult response = mockMvc.perform(get("/api/commons?id=18"))
+                .andExpect(status().isOk()).andReturn();
+
+        verify(commonsRepository, times(1)).findById(eq(18L));
+        Commons1.setEffectiveCapacity(20);
+        String expectedJson = mapper.writeValueAsString(Commons1);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = {"USER"})
+    @Test
     public void getHealthUpdateStrategiesTest() throws Exception {
         var response = mockMvc.perform(
                 get("/api/commons/all-health-update-strategies")
@@ -851,6 +920,42 @@ public class CommonsControllerTests extends ControllerTestCase {
 
         verify(commonsRepository, times(1)).findAll();
 
+        String responseString = response.getResponse().getContentAsString();
+        List<CommonsPlus> actualCommonsPlus = objectMapper.readValue(responseString,
+                new TypeReference<List<CommonsPlus>>() {
+                });
+        assertEquals(actualCommonsPlus, expectedCommonsPlus);
+    }
+
+    @WithMockUser(roles = {"USER"})
+    @Test
+    public void getCommonsPlusEffectiveCapacityTest() throws Exception {
+        List<Commons> expectedCommons = new ArrayList<>();
+        Commons Commons1 = Commons.builder()
+                .name("TestCommons1")
+                .id(1L)
+                .carryingCapacity(10)
+                .capacityPerUser(1)
+                .build();
+        expectedCommons.add(Commons1);
+
+        List<CommonsPlus> expectedCommonsPlus = new ArrayList<>();
+        CommonsPlus CommonsPlus1 = CommonsPlus.builder()
+                .commons(Commons1)
+                .totalCows(50)
+                .totalUsers(20)
+                .build();
+
+        expectedCommonsPlus.add(CommonsPlus1);
+        when(commonsRepository.findAll()).thenReturn(expectedCommons);
+        when(commonsRepository.getNumCows(1L)).thenReturn(Optional.of(50));
+        when(commonsRepository.getNumUsers(1L)).thenReturn(Optional.of(20));
+
+        MvcResult response = mockMvc.perform(get("/api/commons/allplus").contentType("application/json"))
+                .andExpect(status().isOk()).andReturn();
+
+        verify(commonsRepository, times(1)).findAll();
+        expectedCommons.get(0).setEffectiveCapacity(20);
         String responseString = response.getResponse().getContentAsString();
         List<CommonsPlus> actualCommonsPlus = objectMapper.readValue(responseString,
                 new TypeReference<List<CommonsPlus>>() {
