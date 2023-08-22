@@ -24,46 +24,47 @@ public class CommonStatsCSVHelper {
   private CommonStatsCSVHelper() {}
 
   /**
-   * This method is a hack to avoid a jacoco issue; it isn't possible to 
-   * exclude an individual method call from jacoco coverage, but we can
-   * exclude the entire method.  
-   * @param out
+   * This method is a hack to avoid a pitest issue; it isn't possible to 
+   * exclude an individual method call from pitest coverage, but we can
+   * exclude the entire method by name in the pitest settings in pom.xml
+   * @param out stream to close
+   * @param csvPrinter printer to close
    */
 
   public static void flush_and_close_noPitest(ByteArrayOutputStream out, CSVPrinter csvPrinter) throws IOException {
-<span class="fc" id="L34">    csvPrinter.flush();</span>
-<span class="fc" id="L35">    csvPrinter.close();</span>
-<span class="fc" id="L36">    out.flush();</span>
-<span class="fc" id="L37">    out.close();</span>
-<span class="fc" id="L38">  }</span>
+<span class="fc" id="L35">    csvPrinter.flush();</span>
+<span class="fc" id="L36">    csvPrinter.close();</span>
+<span class="fc" id="L37">    out.flush();</span>
+<span class="fc" id="L38">    out.close();</span>
+<span class="fc" id="L39">  }</span>
   
   public static ByteArrayInputStream toCSV(Iterable&lt;CommonStats&gt; lines) throws IOException {
-<span class="fc" id="L41">    final CSVFormat format = CSVFormat.DEFAULT;</span>
+<span class="fc" id="L42">    final CSVFormat format = CSVFormat.DEFAULT;</span>
 
-<span class="fc" id="L43">    List&lt;String&gt; headers = Arrays.asList(</span>
+<span class="fc" id="L44">    List&lt;String&gt; headers = Arrays.asList(</span>
         &quot;id&quot;,
         &quot;commonsId&quot;,
         &quot;numCows&quot;,
         &quot;avgHealth&quot;,
         &quot;timestamp&quot;);
 
-<span class="fc" id="L50">    ByteArrayOutputStream out = new ByteArrayOutputStream();</span>
-<span class="fc" id="L51">    CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);</span>
+<span class="fc" id="L51">    ByteArrayOutputStream out = new ByteArrayOutputStream();</span>
+<span class="fc" id="L52">    CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);</span>
 
-<span class="fc" id="L53">    csvPrinter.printRecord(headers);</span>
+<span class="fc" id="L54">    csvPrinter.printRecord(headers);</span>
 
-<span class="fc bfc" id="L55" title="All 2 branches covered.">    for (CommonStats stats : lines) {</span>
-<span class="fc" id="L56">      List&lt;String&gt; data = Arrays.asList(</span>
-<span class="fc" id="L57">          String.valueOf(stats.getId()),</span>
-<span class="fc" id="L58">          String.valueOf(stats.getCommonsId()),</span>
-<span class="fc" id="L59">          String.valueOf(stats.getNumCows()),</span>
-<span class="fc" id="L60">          String.valueOf(stats.getAvgHealth()),</span>
-<span class="fc" id="L61">          String.valueOf(stats.getTimestamp()));</span>
-<span class="fc" id="L62">      csvPrinter.printRecord(data);</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    for (CommonStats stats : lines) {</span>
+<span class="fc" id="L57">      List&lt;String&gt; data = Arrays.asList(</span>
+<span class="fc" id="L58">          String.valueOf(stats.getId()),</span>
+<span class="fc" id="L59">          String.valueOf(stats.getCommonsId()),</span>
+<span class="fc" id="L60">          String.valueOf(stats.getNumCows()),</span>
+<span class="fc" id="L61">          String.valueOf(stats.getAvgHealth()),</span>
+<span class="fc" id="L62">          String.valueOf(stats.getTimestamp()));</span>
+<span class="fc" id="L63">      csvPrinter.printRecord(data);</span>
+<span class="fc" id="L64">    }</span>
 
-<span class="fc" id="L65">    flush_and_close_noPitest(out, csvPrinter);</span>
-<span class="fc" id="L66">    return new ByteArrayInputStream(out.toByteArray());</span>
+<span class="fc" id="L66">    flush_and_close_noPitest(out, csvPrinter);</span>
+<span class="fc" id="L67">    return new ByteArrayInputStream(out.toByteArray());</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
