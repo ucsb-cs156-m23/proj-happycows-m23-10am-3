@@ -23,7 +23,7 @@ public class CommonStatsCSVHelper {
 
   private CommonStatsCSVHelper() {}
 
-  /*
+  /**
    * This method is a hack to avoid a pitest issue; it isn't possible to 
    * exclude an individual method call from pitest coverage, but we can
    * exclude the entire method by name in the pitest settings in pom.xml
