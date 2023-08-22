@@ -9,10 +9,6 @@ import {apiCurrentUserFixtures} from "fixtures/currentUserFixtures";
 import {systemInfoFixtures} from "fixtures/systemInfoFixtures";
 import healthUpdateStrategyListFixtures from "../../fixtures/healthUpdateStrategyListFixtures";
 
-const curr = new Date();
-const today = curr.toISOString().substring(0, 10);
-const onemonthfromtoday = new Date(curr.getFullYear(), curr.getMonth()+1, curr.getDate()).toISOString().substring(0, 10);
-
 const mockedNavigate = jest.fn();
 jest.mock('react-router-dom', () => {
     const originalModule = jest.requireActual('react-router-dom');
