@@ -64,7 +64,7 @@ import java.lang.Math;
     public ResponseEntity&lt;String&gt; getCommons() throws JsonProcessingException {
 <span class="fc" id="L65">        log.info(&quot;getCommons()...&quot;);</span>
 <span class="fc" id="L66">        Iterable&lt;Commons&gt; commons = commonsRepository.findAll();</span>
-<span class="fc" id="L67">        commons.forEach((common) -&gt; getEffectiveCapacity(common));</span>
+<span class="fc" id="L67">        commons.forEach((common) -&gt; updateEffectiveCapacity(common));</span>
 <span class="fc" id="L68">        String body = mapper.writeValueAsString(commons);</span>
 <span class="fc" id="L69">        return ResponseEntity.ok().body(body);</span>
     }
@@ -79,7 +79,7 @@ import java.lang.Math;
         // below
 <span class="fc" id="L80">        List&lt;Commons&gt; commonsList = new ArrayList&lt;Commons&gt;();</span>
 <span class="fc" id="L81">        commonsListIter.forEach(commonsList::add);</span>
-<span class="fc" id="L82">        commonsList.forEach((common) -&gt; getEffectiveCapacity(common));</span>
+<span class="fc" id="L82">        commonsList.forEach((common) -&gt; updateEffectiveCapacity(common));</span>
 
 <span class="fc" id="L84">        List&lt;CommonsPlus&gt; commonsPlusList1 = commonsList.stream()</span>
 <span class="fc" id="L85">                .map(c -&gt; toCommonsPlus(c))</span>
@@ -98,7 +98,7 @@ import java.lang.Math;
             @Parameter(name=&quot;id&quot;) @RequestParam long id) throws JsonProcessingException {
 <span class="fc" id="L99">        Commons common = commonsRepository.findById(id)</span>
 <span class="fc" id="L100">                .orElseThrow(() -&gt; new EntityNotFoundException(Commons.class, id));</span>
-<span class="fc" id="L101">        common = getEffectiveCapacity(common);</span>
+<span class="fc" id="L101">        common = updateEffectiveCapacity(common);</span>
 <span class="fc" id="L102">        CommonsPlus commonsPlus = toCommonsPlus(common);</span>
 
 <span class="fc" id="L104">        return commonsPlus;</span>
@@ -157,7 +157,7 @@ import java.lang.Math;
 
 <span class="fc" id="L158">        Commons commons = commonsRepository.findById(id)</span>
 <span class="fc" id="L159">                .orElseThrow(() -&gt; new EntityNotFoundException(Commons.class, id));</span>
-<span class="fc" id="L160">        commons = getEffectiveCapacity(commons);</span>
+<span class="fc" id="L160">        commons = updateEffectiveCapacity(commons);</span>
 <span class="fc" id="L161">        return commons;</span>
     }
 
@@ -312,11 +312,12 @@ import java.lang.Math;
 <span class="fc" id="L312">                .totalUsers(numUsers.orElse(0))</span>
 <span class="fc" id="L313">                .build();</span>
     }
-
-    public Commons getEffectiveCapacity(Commons c) {
-<span class="fc" id="L317">        Optional&lt;Integer&gt; numUsers = commonsRepository.getNumUsers(c.getId());</span>
-<span class="fc" id="L318">        c.setEffectiveCapacity(Math.max(numUsers.orElse(0) * c.getCapacityPerUser(), c.getCarryingCapacity()));</span>
-<span class="fc" id="L319">        return c;</span>
+/** This method should be called each time a commons object is being used before the value of effective capacity is retrieved from that commons.  This probably should go in the getter for effectiveCapacity, but we don't have access there to the commonsRepository to do the lookup of numUsers.
+*/
+    public Commons updateEffectiveCapacity(Commons c) {
+<span class="fc" id="L318">        Optional&lt;Integer&gt; numUsers = commonsRepository.getNumUsers(c.getId());</span>
+<span class="fc" id="L319">        c.setEffectiveCapacity(Math.max(numUsers.orElse(0) * c.getCapacityPerUser(), c.getCarryingCapacity()));</span>
+<span class="fc" id="L320">        return c;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
