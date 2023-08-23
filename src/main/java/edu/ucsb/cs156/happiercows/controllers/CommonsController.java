@@ -313,7 +313,7 @@ public class CommonsController extends ApiController {
                 .build();
     }
 
-    public Commons getEffectiveCapacity(Commons c) {
+    public Commons updateEffectiveCapacity(Commons c) {
         Optional<Integer> numUsers = commonsRepository.getNumUsers(c.getId());
         c.setEffectiveCapacity(Math.max(numUsers.orElse(0) * c.getCapacityPerUser(), c.getCarryingCapacity()));
         return c;
