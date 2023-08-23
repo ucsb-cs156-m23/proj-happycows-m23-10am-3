@@ -62,8 +62,8 @@ describe("AdminCreateCommonsPage tests", () => {
             "cowPrice": 10,
             "milkPrice": 5,
             "startingBalance": 500,
-            "startingDate": "2023-08-20T00:00:00.000Z",
-            "endingDate": "2023-09-20T00:00:00.000Z",
+            "startingDate": "2023-08-20",
+            "endingDate": "2023-09-20",
             "degradationRate": 30.4,
             "carryingCapacity": 25,
             "aboveCapacityHealthUpdateStrategy": "strat2",
@@ -133,8 +133,8 @@ describe("AdminCreateCommonsPage tests", () => {
         expect(mockToast).toBeCalledWith(<div>Commons successfully created!
             <br />id: 5
             <br />name: My New Commons
-            <br />startDate: 2023-08-20T00:00:00.000Z
-            <br />endDate: 2023-09-20T00:00:00.000Z
+            <br />startDate: 2023-08-20
+            <br />endDate: 2023-09-20
             <br />cowPrice: 10
             <br />carryingCapacity: 25
         </div>);
