@@ -64,7 +64,7 @@ public class CommonsController extends ApiController {
     public ResponseEntity<String> getCommons() throws JsonProcessingException {
         log.info("getCommons()...");
         Iterable<Commons> commons = commonsRepository.findAll();
-        commons.forEach((common) -> getEffectiveCapacity(common));
+        commons.forEach((common) -> updateEffectiveCapacity(common));
         String body = mapper.writeValueAsString(commons);
         return ResponseEntity.ok().body(body);
     }
@@ -79,7 +79,7 @@ public class CommonsController extends ApiController {
         // below
         List<Commons> commonsList = new ArrayList<Commons>();
         commonsListIter.forEach(commonsList::add);
-        commonsList.forEach((common) -> getEffectiveCapacity(common));
+        commonsList.forEach((common) -> updateEffectiveCapacity(common));
 
         List<CommonsPlus> commonsPlusList1 = commonsList.stream()
                 .map(c -> toCommonsPlus(c))
@@ -98,7 +98,7 @@ public class CommonsController extends ApiController {
             @Parameter(name="id") @RequestParam long id) throws JsonProcessingException {
         Commons common = commonsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Commons.class, id));
-        common = getEffectiveCapacity(common);
+        common = updateEffectiveCapacity(common);
         CommonsPlus commonsPlus = toCommonsPlus(common);
 
         return commonsPlus;
@@ -157,7 +157,7 @@ public class CommonsController extends ApiController {
 
         Commons commons = commonsRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Commons.class, id));
-        commons = getEffectiveCapacity(commons);
+        commons = updateEffectiveCapacity(commons);
         return commons;
     }
 
