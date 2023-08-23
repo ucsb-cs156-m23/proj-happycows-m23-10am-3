@@ -34,7 +34,6 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
     // Stryker disable all
     const curr = new Date();
     const today = curr.toISOString().substring(0, 10);
-    const onemonthfromtoday = new Date(curr.getFullYear(), curr.getMonth()+1, curr.getDate()).toISOString().substring(0, 10);
     // Stryker restore all
     const belowStrategy = initialCommons?.belowCapacityStrategy || healthUpdateStrategies?.defaultBelowCapacity;
     const aboveStrategy = initialCommons?.aboveCapacityStrategy || healthUpdateStrategies?.defaultAboveCapacity;
@@ -42,20 +41,19 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
     return (
         <Form onSubmit={handleSubmit(submitAction)}>
             <Row>           
-                    {initialCommons && (
-                        <Form.Group className="mb-3">
-                            <Form.Label htmlFor="id">Id</Form.Label>
-                            <Form.Control
-                                data-testid={`${testid}-id`}
-                                id="id"
-                                type="text"
-                                {...register("id")}
-                                value={initialCommons.id}
-                                disabled
-                            />
-                        </Form.Group>
-                    )}
-                <Col>
+                {initialCommons && (
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="id">Id</Form.Label>
+                        <Form.Control
+                            data-testid={`${testid}-id`}
+                            id="id"
+                            type="text"
+                            {...register("id")}
+                            value={initialCommons.id}
+                            disabled
+                        />
+                    </Form.Group>
+                )}
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="name">Commons Name</Form.Label>
                         <Form.Control
@@ -69,7 +67,8 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                             {errors.name?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Col>
+            </Row>
+            <Row>
                 <Col>
                     <Form.Group className="mb-3">
                     <Form.Label htmlFor="startingBalance">Starting Balance</Form.Label>
@@ -134,7 +133,6 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                     </Form.Group>
                 </Col>
             </Row>
-
             <Row>
                 <Col>
                     <Form.Group className="mb-3">
@@ -154,27 +152,6 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                     />
                     <Form.Control.Feedback type="invalid">
                         {errors.startingDate?.message}
-                    </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-                <Col>
-                    <Form.Group className="mb-3">
-                    <Form.Label htmlFor="endingDate">Ending Date</Form.Label>
-                    <Form.Control
-                        data-testid={`${testid}-endingDate`}
-                        id="endingDate"
-                        type="date"
-                        defaultValue={onemonthfromtoday}
-                        isInvalid={!!errors.endingDate}
-                        {...register("endingDate", {
-                            valueAsDate: true,
-                            validate: {
-                                isPresent: (v) => !isNaN(v) || "Ending date is required",
-                            },
-                        })}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.endingDate?.message}
                     </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
@@ -254,8 +231,6 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         {...register("showLeaderboard")}
                     />
                     </Form.Group>
-                </Col>
-                <Col>
                 </Col>
             </Row>
 

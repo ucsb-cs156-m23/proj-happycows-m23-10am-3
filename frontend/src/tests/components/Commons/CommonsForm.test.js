@@ -46,7 +46,6 @@ describe("CommonsForm tests", () => {
       /Cow Price/,
       /Milk Price/,
       /Starting Date/,
-      /Ending Date/,
       /Degradation Rate/,
       /Carrying Capacity/,
       /Show Leaderboard\?/,
@@ -90,8 +89,6 @@ describe("CommonsForm tests", () => {
     fireEvent.change(milkPriceInput, { target: { value: "" } });
     const startingDateInput = screen.getByTestId("CommonsForm-startingDate");
     fireEvent.change(startingDateInput, { target: { value: "" } });
-    const endDateInput = screen.getByTestId("CommonsForm-endingDate");
-    fireEvent.change(endDateInput, { target: { value: "" } });
     const degradationRateInput = screen.getByTestId("CommonsForm-degradationRate");
     fireEvent.change(degradationRateInput, { target: { value: "" } });
     const carryingCapacityInput = screen.getByTestId("CommonsForm-carryingCapacity");
@@ -106,7 +103,6 @@ describe("CommonsForm tests", () => {
     expect(screen.getByText(/cow price is required/i)).toBeInTheDocument();
     expect(screen.getByText(/milk price is required/i)).toBeInTheDocument();
     expect(screen.getByText(/starting date is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/ending date is required/i)).toBeInTheDocument();
     expect(screen.getByText(/degradation rate is required/i)).toBeInTheDocument();
     expect(screen.getByText(/carrying capacity is required/i)).toBeInTheDocument();
 
@@ -121,7 +117,6 @@ describe("CommonsForm tests", () => {
       "CommonsForm-cowPrice",
       "CommonsForm-milkPrice",
       "CommonsForm-startingDate",
-      "CommonsForm-endingDate",
       "CommonsForm-degradationRate",
       "CommonsForm-carryingCapacity",
     ].forEach(
