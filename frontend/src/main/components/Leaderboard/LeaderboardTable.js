@@ -14,8 +14,9 @@ export default function LeaderboardTable({ leaderboardUsers , currentUser }) {
             accessor: 'username', 
         },
         {
+            id : 'totalWealth',
             Header: 'Total Wealth',
-            accessor: 'totalWealth',
+            accessor: (leaderboard) => `$${String(leaderboard.totalWealth.toFixed(2))}`,
         },
         {
             Header: 'Cows Owned',

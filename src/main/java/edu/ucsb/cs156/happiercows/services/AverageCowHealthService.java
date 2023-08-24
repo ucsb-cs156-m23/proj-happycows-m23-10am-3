@@ -7,6 +7,7 @@ import edu.ucsb.cs156.happiercows.entities.UserCommons;
 
 import edu.ucsb.cs156.happiercows.repositories.UserCommonsRepository;
 
+@Service
 public class AverageCowHealthService {
 
     @Autowired

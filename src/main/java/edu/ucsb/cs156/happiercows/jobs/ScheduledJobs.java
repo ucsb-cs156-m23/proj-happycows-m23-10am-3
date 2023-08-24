@@ -33,8 +33,11 @@ public class ScheduledJobs {
 
     @Autowired
     MilkTheCowsJobFactory milkTheCowsJobFactory;
+
+    @Autowired
+    CommonStatsJobFactory commonStatsJobFactory;
     
-    @Scheduled(cron = "${app.updateCowHealth.cron}")
+    @Scheduled(cron = "${app.updateCowHealth.cron}", zone = "America/Los_Angeles")
     public void runUpdateCowHealthJobBasedOnCron() {
        log.info("runUpdateCowHealthJobBasedOnCron: running");
 
@@ -44,7 +47,7 @@ public class ScheduledJobs {
        log.info("runUpdateCowHealthJobBasedOnCron: launched job");
     }
 
-    @Scheduled(cron = "${app.milkTheCows.cron}")
+    @Scheduled(cron = "${app.milkTheCows.cron}", zone = "America/Los_Angeles")
     public void runMilkTheCowsJobBasedOnCron() {
        log.info("runMilkTheCowsJobBasedOnCron: running");
 
@@ -52,5 +55,15 @@ public class ScheduledJobs {
        jobService.runAsJob(milkTheCowsJob);
     
        log.info("runMilkTheCowsJobBasedOnCron: launched job");
+    }
+
+    @Scheduled(cron = "${app.commonStats.cron}", zone = "America/Los_Angeles")
+    public void runCommonStatsJobBasedOnCron() {
+       log.info("runCommonStatsJobBasedOnCron: running");
+
+       JobContextConsumer commonStatsJob = commonStatsJobFactory.create();
+       jobService.runAsJob(commonStatsJob);
+    
+       log.info("runCommonStatsJobBasedOnCron: launched job");
     }
 }

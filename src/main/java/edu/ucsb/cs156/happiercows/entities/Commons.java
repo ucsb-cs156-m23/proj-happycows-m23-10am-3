@@ -35,6 +35,7 @@ public class Commons {
     private int carryingCapacity;
     private int capacityPerUser;
     private int effectiveCapacity;
+
     private double degradationRate;
 
     // these defaults match old behavior
