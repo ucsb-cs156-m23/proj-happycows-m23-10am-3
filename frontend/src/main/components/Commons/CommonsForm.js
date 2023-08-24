@@ -6,6 +6,13 @@ import HealthUpdateStrategiesDropdown from "main/components/Commons/HealthStrate
 
 function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
     // Stryker disable all
+    const defaultValues = {
+        startingBalance: 10000,
+        cowPrice: 100,
+        milkPrice: 20,
+        degradationRate: 0.01,
+        carryingCapacity: 1000,
+      } 
     const {
         register,
         formState: { errors },
@@ -24,12 +31,16 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
 
     const testid = "CommonsForm";
 
+    // Stryker disable all
+    const curr = new Date();
+    const today = curr.toISOString().substring(0, 10);
+    // Stryker restore all
     const belowStrategy = initialCommons?.belowCapacityStrategy || healthUpdateStrategies?.defaultBelowCapacity;
     const aboveStrategy = initialCommons?.aboveCapacityStrategy || healthUpdateStrategies?.defaultAboveCapacity;
 
     return (
         <Form onSubmit={handleSubmit(submitAction)}>
-            <Row>                
+            <Row>           
                 {initialCommons && (
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="id">Id</Form.Label>
@@ -43,7 +54,6 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         />
                     </Form.Group>
                 )}
-                <Col>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="name">Commons Name</Form.Label>
                         <Form.Control
@@ -57,9 +67,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                             {errors.name?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Col>
             </Row>
-
             <Row>
                 <Col>
                     <Form.Group className="mb-3">
@@ -69,10 +77,11 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         data-testid={`${testid}-startingBalance`}
                         type="number"
                         step="0.01"
+                        defaultValue={defaultValues.startingBalance}
                         isInvalid={!!errors.startingBalance}
                         {...register("startingBalance", {
                             valueAsNumber: true,
-                            required: "Starting Balance is required",
+                            required: "Starting balance is required",
                             min: { value: 0.00, message: "Starting Balance must be ≥ 0.00" },
                         })}
                     />
@@ -89,6 +98,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         id="cowPrice"
                         type="number"
                         step="0.01"
+                        defaultValue={defaultValues.cowPrice}
                         isInvalid={!!errors.cowPrice}
                         {...register("cowPrice", {
                             valueAsNumber: true,
@@ -109,6 +119,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         id="milkPrice"
                         type="number"
                         step="0.01"
+                        defaultValue={defaultValues.milkPrice}
                         isInvalid={!!errors.milkPrice}
                         {...register("milkPrice", {
                             valueAsNumber: true,
@@ -122,7 +133,6 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                     </Form.Group>
                 </Col>
             </Row>
-
             <Row>
                 <Col>
                     <Form.Group className="mb-3">
@@ -131,6 +141,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         data-testid={`${testid}-startingDate`}
                         id="startingDate"
                         type="date"
+                        defaultValue={today}
                         isInvalid={!!errors.startingDate}
                         {...register("startingDate", {
                             valueAsDate: true,
@@ -152,6 +163,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         id="degradationRate"
                         type="number"
                         step="0.01"
+                        defaultValue={defaultValues.degradationRate}
                         isInvalid={!!errors.degradationRate}
                         {...register("degradationRate", {
                             valueAsNumber: true,
@@ -172,6 +184,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         id="carryingCapacity"
                         type="number"
                         step="1"
+                        defaultValue={defaultValues.carryingCapacity}
                         isInvalid={!!errors.carryingCapacity}
                         {...register("carryingCapacity", {
                             valueAsNumber: true,
@@ -186,10 +199,10 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                 </Col>
             </Row>
 
-            <h4>
-                Health update formula
-            </h4>
             <Row>
+                <h3>
+                Health update formula
+                </h3>
                 <Col>
                     <HealthUpdateStrategiesDropdown
                         formName={"aboveCapacityHealthUpdateStrategy"}
