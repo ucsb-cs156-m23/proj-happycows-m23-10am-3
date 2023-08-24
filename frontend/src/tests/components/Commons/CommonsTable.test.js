@@ -19,6 +19,13 @@ jest.mock('react-router-dom', () => ({
 describe("UserTable tests", () => {
   const queryClient = new QueryClient();
 
+  Object.defineProperty(window, "location", {
+    value: {
+      href: ""
+    },
+    writable:true
+  })
+
   test("renders without crashing for empty table with user not logged in", () => {
     const currentUser = null;
 
@@ -100,6 +107,7 @@ describe("UserTable tests", () => {
     expect(screen.getByTestId(`${testId}-cell-row-0-col-Edit-button`)).toHaveClass("btn-primary");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-Delete-button`)).toHaveClass("btn-danger");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-Leaderboard-button`)).toHaveClass("btn-secondary");
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Download-button`)).toHaveClass("btn-success");
   });
 
   test("the correct parameters are passed to useBackendMutation when Delete is clicked", async () => {
@@ -134,5 +142,31 @@ describe("UserTable tests", () => {
     });
 
   });
+
+  test("the download button works as intended", async () => {
+
+    const currentUser = currentUserFixtures.adminUser;
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <CommonsTable commons={commonsPlusFixtures.threeCommonsPlus} currentUser={currentUser} />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("CommonsTable-cell-row-0-col-Download-button")).toBeInTheDocument();
+    });
+
+    const downloadButton = screen.getByTestId("CommonsTable-cell-row-0-col-Download-button");
+    fireEvent.click(downloadButton);
+
+    await waitFor(() => {
+      expect(window.location.href).toBe("/api/commons/1/download?commonsId=1")
+    });
+
+  });
+
 
 });

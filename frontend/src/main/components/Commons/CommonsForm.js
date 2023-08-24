@@ -261,12 +261,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                 <Col>
                 </Col>
             </Row>
-
-
-
-
-
-
+            
             <Button type="submit" data-testid="CommonsForm-Submit-Button">{buttonLabel}</Button>
         </Form>
     );
