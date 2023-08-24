@@ -20,6 +20,7 @@ class CowHealthUpdateStrategyTests {
     Commons commons = Commons.builder()
             .degradationRate(0.01)
             .carryingCapacity(100)
+            .effectiveCapacity(100)
             .build();
     UserCommons user = UserCommons.builder().cowHealth(50).build();
 

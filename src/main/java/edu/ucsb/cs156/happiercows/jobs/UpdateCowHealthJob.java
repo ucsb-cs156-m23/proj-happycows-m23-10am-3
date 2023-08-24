@@ -9,6 +9,10 @@ import edu.ucsb.cs156.happiercows.repositories.UserRepository;
 import edu.ucsb.cs156.happiercows.services.jobs.JobContext;
 import edu.ucsb.cs156.happiercows.services.jobs.JobContextConsumer;
 import edu.ucsb.cs156.happiercows.strategies.CowHealthUpdateStrategy;
+
+import java.util.Optional;
+
+import edu.ucsb.cs156.happiercows.controllers.CommonsController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -21,7 +25,7 @@ public class UpdateCowHealthJob implements JobContextConsumer {
     private UserCommonsRepository userCommonsRepository;
     @Getter
     private UserRepository userRepository;
-
+    
     @Override
     public void accept(JobContext ctx) throws Exception {
         ctx.log("Updating cow health...");
@@ -29,7 +33,8 @@ public class UpdateCowHealthJob implements JobContextConsumer {
         Iterable<Commons> allCommons = commonsRepository.findAll();
 
         for (Commons commons : allCommons) {
-            ctx.log("Commons " + commons.getName() + ", degradationRate: " + commons.getDegradationRate() + ", carryingCapacity: " + commons.getCarryingCapacity());
+            Commons common = updateEffectiveCapacity(commons);
+            ctx.log("Commons " + common.getName() + ", degradationRate: " + common.getDegradationRate() + ", effectiveCapacity: " + common.getEffectiveCapacity());
             int numUsers = commonsRepository.getNumUsers(commons.getId()).orElseThrow(() -> new RuntimeException("Error calling getNumUsers(" + commons.getId() + ")"));
 
             if (numUsers==0) {
@@ -37,12 +42,12 @@ public class UpdateCowHealthJob implements JobContextConsumer {
                 continue;
             }
 
-            int carryingCapacity = commons.getCarryingCapacity();
+            int effectiveCapacity = commons.getEffectiveCapacity();
             Iterable<UserCommons> allUserCommons = userCommonsRepository.findByCommonsId(commons.getId());
 
             Integer totalCows = commonsRepository.getNumCows(commons.getId()).orElseThrow(() -> new RuntimeException("Error calling getNumCows(" + commons.getId() + ")"));
 
-            var isAboveCapacity = totalCows > carryingCapacity;
+            var isAboveCapacity = totalCows > effectiveCapacity;
             var cowHealthUpdateStrategy = isAboveCapacity ? commons.getAboveCapacityHealthUpdateStrategy() : commons.getBelowCapacityHealthUpdateStrategy();
 
             for (UserCommons userCommons : allUserCommons) {
@@ -81,5 +86,11 @@ public class UpdateCowHealthJob implements JobContextConsumer {
 
             ctx.log(" " + userCommons.getCowDeaths() + " cows for this user died." );
         }
+    }
+
+    public Commons updateEffectiveCapacity(Commons c) {
+        Optional<Integer> numUsers = commonsRepository.getNumUsers(c.getId());
+        c.setEffectiveCapacity(Math.max(numUsers.orElse(0) * c.getCapacityPerUser(), c.getCarryingCapacity()));
+        return c;
     }
 }
