@@ -12,6 +12,7 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
         milkPrice: 20,
         degradationRate: 0.01,
         carryingCapacity: 1000,
+        capacityPerUser: 50,
       } 
     const {
         register,
@@ -177,6 +178,10 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                     </Form.Group>    
                 </Col>
                 <Col>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
                     <Form.Group className="mb-3">
                     <Form.Label htmlFor="carryingCapacity">Carrying Capacity</Form.Label>
                     <Form.Control
@@ -197,29 +202,26 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                     </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
-            </Row>
-
-            <Row>
-                <h3>
-                Health update formula
-                </h3>
                 <Col>
-                    <HealthUpdateStrategiesDropdown
-                        formName={"aboveCapacityHealthUpdateStrategy"}
-                        displayName={"When above capacity"}
-                        initialValue={aboveStrategy}
-                        register={register}
-                        healthUpdateStrategies={healthUpdateStrategies}
-                    />           
-                </Col>
-                <Col>
-                    <HealthUpdateStrategiesDropdown
-                        formName={"belowCapacityHealthUpdateStrategy"}
-                        displayName={"When below capacity"}
-                        initialValue={belowStrategy}
-                        register={register}
-                        healthUpdateStrategies={healthUpdateStrategies}
+                    <Form.Group className="mb-3">
+                    <Form.Label htmlFor="capacityPerUser">Capacity Per User</Form.Label>
+                    <Form.Control
+                        data-testid={`${testid}-capacityPerUser`}
+                        id="capacityPerUser"
+                        type="number"
+                        step="1"
+                        defaultValue={defaultValues.capacityPerUser}
+                        isInvalid={!!errors.capacityPerUser}
+                        {...register("capacityPerUser", {
+                            valueAsNumber: true,
+                            required: "Capacity per user is required",
+                            min: { value: 1, message: "Capacity per user must be ≥ 1" },
+                        })}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.capacityPerUser?.message}
+                    </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
                 <Col>
                     <Form.Group className="mb-3">
@@ -231,6 +233,32 @@ function CommonsForm({ initialCommons, submitAction, buttonLabel = "Create" }) {
                         {...register("showLeaderboard")}
                     />
                     </Form.Group>
+                </Col>
+            </Row>
+
+            <Row>
+                <h4>
+                Health Update Formula
+                </h4>
+                <Col>
+                    <HealthUpdateStrategiesDropdown
+                        formName={"aboveCapacityHealthUpdateStrategy"}
+                        displayName={"When Above Capacity"}
+                        initialValue={aboveStrategy}
+                        register={register}
+                        healthUpdateStrategies={healthUpdateStrategies}
+                    />           
+                </Col>
+                <Col>
+                    <HealthUpdateStrategiesDropdown
+                        formName={"belowCapacityHealthUpdateStrategy"}
+                        displayName={"When Below Capacity"}
+                        initialValue={belowStrategy}
+                        register={register}
+                        healthUpdateStrategies={healthUpdateStrategies}
+                    />
+                </Col>
+                <Col>
                 </Col>
             </Row>
 

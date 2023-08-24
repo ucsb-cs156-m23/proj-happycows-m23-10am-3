@@ -48,9 +48,10 @@ describe("CommonsForm tests", () => {
       /Starting Date/,
       /Degradation Rate/,
       /Carrying Capacity/,
+      /Capacity Per User/,
       /Show Leaderboard\?/,
-      /When below capacity/,
-      /When above capacity/,
+      /When Below Capacity/,
+      /When Above Capacity/,
 
     ].forEach(
       (pattern) => {
@@ -93,6 +94,8 @@ describe("CommonsForm tests", () => {
     fireEvent.change(degradationRateInput, { target: { value: "" } });
     const carryingCapacityInput = screen.getByTestId("CommonsForm-carryingCapacity");
     fireEvent.change(carryingCapacityInput, { target: { value: "" } });
+    const capacityPerUserInput = screen.getByTestId("CommonsForm-capacityPerUser");
+    fireEvent.change(capacityPerUserInput, { target: { value: "" } });
     fireEvent.click(submitButton);
 
     expect(await screen.findByTestId("CommonsForm-name")).toBeInTheDocument();
@@ -105,6 +108,7 @@ describe("CommonsForm tests", () => {
     expect(screen.getByText(/starting date is required/i)).toBeInTheDocument();
     expect(screen.getByText(/degradation rate is required/i)).toBeInTheDocument();
     expect(screen.getByText(/carrying capacity is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/capacity per user is required/i)).toBeInTheDocument();
 
     // check that each of the fields that has 
     // a validation error is marked as invalid
@@ -119,6 +123,7 @@ describe("CommonsForm tests", () => {
       "CommonsForm-startingDate",
       "CommonsForm-degradationRate",
       "CommonsForm-carryingCapacity",
+      "CommonsForm-capacityPerUser",
     ].forEach(
       (testid) => {
         const element = screen.getByTestId(testid);
@@ -183,6 +188,9 @@ describe("CommonsForm tests", () => {
     fireEvent.click(submitButton);
     await screen.findByText(/Carrying Capacity must be ≥ 1/i);
 
+    fireEvent.change(screen.getByTestId("CommonsForm-capacityPerUser"), { target: { value: "-1" } });
+    fireEvent.click(submitButton);
+    await screen.findByText(/Capacity Per User must be ≥ 1/i);
 
     expect(submitAction).not.toBeCalled();
   });
@@ -228,7 +236,7 @@ describe("CommonsForm tests", () => {
       </QueryClientProvider>
     );
 
-    expect(await screen.findByText(/When below capacity/)).toBeInTheDocument();
+    expect(await screen.findByText(/When Below Capacity/)).toBeInTheDocument();
 
     expect(screen.getByTestId("aboveCapacityHealthUpdateStrategy-Linear")).toBeInTheDocument();
     expect(screen.getByTestId("aboveCapacityHealthUpdateStrategy-Linear")).toHaveAttribute("selected");
