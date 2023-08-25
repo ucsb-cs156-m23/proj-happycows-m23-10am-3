@@ -41,7 +41,7 @@ export default function CommonsTable({ commons, currentUser }) {
     const commonsTableModal = (
     <Modal data-testid="CommonsTable-Modal" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-            <Modal.Title>Commons Deletion Warning! </Modal.Title>
+            <Modal.Title>Warning! You are about to delete a Commons! </Modal.Title>
         </Modal.Header>
         <Modal.Body>
             Click "Yes" if you want to delete this commons. Click "No" if you don't want to delete this commons.       
