@@ -48,5 +48,15 @@ public class ProfitsController extends ApiController {
 
         return profits;
     }
-    
+
+    @Operation(summary = "Get all profits belonging to a user commons as a user via CommonsID")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/all/commonsid/pageable")
+    public Page<Profit> allProfitsByCommonsIdPaged(
+        @Parameter(name="page") @RequestParam int page,
+        @Parameter(name="size") @RequestParam int size
+    ) {
+        Page<Profit> profits = profitRepository.findAll(PageRequest.of(page, size, Sort.by("timestamp").descending()));
+        return profits;
+    }
 }
