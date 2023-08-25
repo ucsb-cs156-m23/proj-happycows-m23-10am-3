@@ -10,7 +10,7 @@ const Profits = ({ profits }) => {
         profits ?
         profits.map(profit => ({
             date: timestampToDate(profit.timestamp),
-            
+
             ...profit
         })) : 
         // Stryker disable next-line ArrayDeclaration : no need to test what happens if [] is replaced with ["Stryker was here"]
