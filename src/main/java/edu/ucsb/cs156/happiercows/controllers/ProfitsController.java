@@ -48,4 +48,5 @@ public class ProfitsController extends ApiController {
 
         return profits;
     }
+    
 }
