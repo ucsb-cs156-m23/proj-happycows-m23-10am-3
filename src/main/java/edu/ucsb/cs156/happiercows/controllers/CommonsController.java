@@ -312,7 +312,9 @@ public class CommonsController extends ApiController {
                 .totalUsers(numUsers.orElse(0))
                 .build();
     }
-
+    /** This method should be called each time a commons object is being used before the value of effective capacity is retrieved from that commons.  
+    This probably should go in the getter for effectiveCapacity, but we don't have access there to the commonsRepository to do the lookup of numUsers.
+   */
     public Commons updateEffectiveCapacity(Commons c) {
         Optional<Integer> numUsers = commonsRepository.getNumUsers(c.getId());
         c.setEffectiveCapacity(Math.max(numUsers.orElse(0) * c.getCapacityPerUser(), c.getCarryingCapacity()));
