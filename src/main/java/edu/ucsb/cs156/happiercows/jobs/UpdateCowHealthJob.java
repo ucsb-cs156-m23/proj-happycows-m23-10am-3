@@ -11,6 +11,7 @@ import edu.ucsb.cs156.happiercows.services.jobs.JobContextConsumer;
 import edu.ucsb.cs156.happiercows.strategies.CowHealthUpdateStrategy;
 
 import java.util.Optional;
+import java.lang.Math;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
