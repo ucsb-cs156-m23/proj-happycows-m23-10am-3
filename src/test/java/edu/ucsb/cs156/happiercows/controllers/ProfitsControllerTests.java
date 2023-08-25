@@ -129,6 +129,7 @@ public class ProfitsControllerTests extends ControllerTestCase {
 
         verify(profitRepository, atLeastOnce()).findAll(any());
 
+        
         String expectedJson = mapper.writeValueAsString(expectedProfitPage);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
