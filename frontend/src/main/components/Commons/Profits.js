@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import ProfitsTable from "main/components/Commons/ProfitsTable";
+import ProfitsTable from "main/components/Commons/PagedProfitsTable";
 
 import { timestampToDate } from "main/utils/dateUtils";
 
@@ -10,6 +10,7 @@ const Profits = ({ profits }) => {
         profits ?
         profits.map(profit => ({
             date: timestampToDate(profit.timestamp),
+            
             ...profit
         })) : 
         // Stryker disable next-line ArrayDeclaration : no need to test what happens if [] is replaced with ["Stryker was here"]
