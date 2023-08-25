@@ -112,7 +112,7 @@ public class ProfitsControllerTests extends ControllerTestCase {
     public void admin_can_get_all_profits_paged() throws Exception {
         // arrange
 
-        PageRequest pageRequest = PageRequest.of(0, 3);
+        PageRequest pageRequest = PageRequest.of(0, 5);
 
         ArrayList<Profit> expectedProfits = new ArrayList<>();
         expectedProfits.addAll(Arrays.asList(p1, p2));
@@ -122,7 +122,7 @@ public class ProfitsControllerTests extends ControllerTestCase {
         when(profitRepository.findAll(any())).thenReturn(expectedProfitPage);
 
         // act
-        MvcResult response = mockMvc.perform(get("/api/profits/all/commonsid/pageable?page=0&size=3")).andDo(print())
+        MvcResult response = mockMvc.perform(get("/api/profits/all/commonsid/pageable?page=0&size=5")).andDo(print())
                         .andExpect(status().isOk()).andReturn();
 
         // assert
