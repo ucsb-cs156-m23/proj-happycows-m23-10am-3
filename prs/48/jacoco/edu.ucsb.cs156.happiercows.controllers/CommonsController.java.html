@@ -312,11 +312,13 @@ import java.lang.Math;
 <span class="fc" id="L312">                .totalUsers(numUsers.orElse(0))</span>
 <span class="fc" id="L313">                .build();</span>
     }
-
+    /** This method should be called each time a commons object is being used before the value of effective capacity is retrieved from that commons.  
+    This probably should go in the getter for effectiveCapacity, but we don't have access there to the commonsRepository to do the lookup of numUsers.
+   */
     public Commons updateEffectiveCapacity(Commons c) {
-<span class="fc" id="L317">        Optional&lt;Integer&gt; numUsers = commonsRepository.getNumUsers(c.getId());</span>
-<span class="fc" id="L318">        c.setEffectiveCapacity(Math.max(numUsers.orElse(0) * c.getCapacityPerUser(), c.getCarryingCapacity()));</span>
-<span class="fc" id="L319">        return c;</span>
+<span class="fc" id="L319">        Optional&lt;Integer&gt; numUsers = commonsRepository.getNumUsers(c.getId());</span>
+<span class="fc" id="L320">        c.setEffectiveCapacity(Math.max(numUsers.orElse(0) * c.getCapacityPerUser(), c.getCarryingCapacity()));</span>
+<span class="fc" id="L321">        return c;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
