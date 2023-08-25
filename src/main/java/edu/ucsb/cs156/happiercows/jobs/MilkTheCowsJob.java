@@ -37,7 +37,7 @@ public class MilkTheCowsJob implements JobContextConsumer {
 
     @Override
     public void accept(JobContext ctx) throws Exception {
-        ctx.log("Starting to milk the cows");
+        ctx.log("Starting to milk the cows (one or multiple)!");
 
         // Iterable<Commons> allCommons = commonsRepository.findAll();
         Iterable<Commons> commonsList;
