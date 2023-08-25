@@ -17,10 +17,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,8 +61,11 @@ public class ProfitsControllerTests extends ControllerTestCase {
             .commons(commons).build();
 
     LocalDateTime t1 = LocalDateTime.parse("2022-03-05T15:50:10");
+    LocalDateTime t2 = LocalDateTime.parse("2022-03-03T13:45:24");
 
     Profit p1 = Profit.builder().id(41).amount(123.45).timestamp(t1).userCommons(uc1).numCows(1).avgCowHealth(80).build();
+
+    Profit p2 = Profit.builder().id(40).amount(132.21).timestamp(t2).userCommons(uc1).numCows(1).avgCowHealth(70).build();
 
     List<Profit> profits = List.of(p1);
 
@@ -99,5 +107,31 @@ public class ProfitsControllerTests extends ControllerTestCase {
                 json.get("message"));
     }
 
-    
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void admin_can_get_all_profits_paged() throws Exception {
+        // arrange
+
+        PageRequest pageRequest = PageRequest.of(0, 3);
+
+        ArrayList<Profit> expectedProfits = new ArrayList<>();
+        expectedProfits.addAll(Arrays.asList(p1, p2));
+
+        Page<Profit> expectedProfitPage = new PageImpl<>(expectedProfits, pageRequest, expectedProfits.size());
+
+        when(profitRepository.findAll(any())).thenReturn(expectedProfitPage);
+
+        // act
+        MvcResult response = mockMvc.perform(get("/api/profits/all/commonsid/pageable?page=0&size=3")).andDo(print())
+                        .andExpect(status().isOk()).andReturn();
+
+        // assert
+
+        verify(profitRepository, atLeastOnce()).findAll(any());
+
+        String expectedJson = mapper.writeValueAsString(expectedProfitPage);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
+
 }
