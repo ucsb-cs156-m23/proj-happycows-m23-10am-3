@@ -104,7 +104,7 @@ public class JobsController extends ApiController {
     @PostMapping("/launch/milkthecowjob")
     public Job launchTestJob(
     ) {
-        JobContextConsumer milkTheCowsJob = milkTheCowsJobFactory.create();
+        JobContextConsumer milkTheCowsJob = milkTheCowsJobFactory.create(null);
         return jobService.runAsJob(milkTheCowsJob);
     }
 

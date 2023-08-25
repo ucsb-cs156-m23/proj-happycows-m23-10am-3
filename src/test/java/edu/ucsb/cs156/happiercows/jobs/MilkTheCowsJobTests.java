@@ -9,6 +9,8 @@ import edu.ucsb.cs156.happiercows.repositories.ProfitRepository;
 import edu.ucsb.cs156.happiercows.repositories.UserCommonsRepository;
 import edu.ucsb.cs156.happiercows.repositories.UserRepository;
 import edu.ucsb.cs156.happiercows.services.jobs.JobContext;
+import lombok.Getter;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -37,6 +39,9 @@ public class MilkTheCowsJobTests {
 
     @Mock
     ProfitRepository profitRepository;
+
+    @Mock 
+    Long targetCommonsId; 
 
     private User user = User
             .builder()
@@ -67,7 +72,7 @@ public class MilkTheCowsJobTests {
 
         // Act
         MilkTheCowsJob milkTheCowsJob = new MilkTheCowsJob(commonsRepository, userCommonsRepository,
-                userRepository, profitRepository);
+                userRepository, profitRepository, targetCommonsId);
 
         milkTheCowsJob.accept(ctx);
 
@@ -104,7 +109,7 @@ public class MilkTheCowsJobTests {
 
         // Act
         MilkTheCowsJob MilkTheCowsJob = new MilkTheCowsJob(commonsRepository, userCommonsRepository,
-                userRepository, profitRepository);
+                userRepository, profitRepository, targetCommonsId);
         MilkTheCowsJob.accept(ctx);
 
         // Assert
@@ -156,7 +161,7 @@ public class MilkTheCowsJobTests {
 
         // Act
         MilkTheCowsJob milkTheCowsJob = new MilkTheCowsJob(commonsRepository, userCommonsRepository,
-                userRepository, profitRepository);
+                userRepository, profitRepository, targetCommonsId);
         milkTheCowsJob.milkCows(ctx, testCommons, origUserCommons);
 
         // Assert

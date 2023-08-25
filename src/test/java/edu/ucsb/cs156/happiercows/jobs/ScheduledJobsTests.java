@@ -82,7 +82,7 @@ public class ScheduledJobsTests {
         Job job = Job.builder().build();
         MockJobContextConsumer mockJob = new MockJobContextConsumer();
 
-       when(milkTheCowsJobFactory.create()).thenReturn(mockJob);
+       when(milkTheCowsJobFactory.create(null)).thenReturn(mockJob);
        when(jobService.runAsJob(any())).thenReturn(job);
 
         // Act
@@ -92,7 +92,7 @@ public class ScheduledJobsTests {
         // Assert
 
         verify(jobService, times(1)).runAsJob(mockJob);
-        verify(milkTheCowsJobFactory, times(1)).create();
+        verify(milkTheCowsJobFactory, times(1)).create(null);
 
     }
 

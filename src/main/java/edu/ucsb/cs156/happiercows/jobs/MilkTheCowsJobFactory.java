@@ -24,11 +24,12 @@ public class MilkTheCowsJobFactory {
     @Autowired
     private ProfitRepository profitRepository;
 
-    public JobContextConsumer create() {
+    public JobContextConsumer create(Long targetCommonsId) {
         return new MilkTheCowsJob(
                 commonsRepository,
                 userCommonsRepository,
                 userRepository,
-                profitRepository);
+                profitRepository, 
+                targetCommonsId);
     }
 }

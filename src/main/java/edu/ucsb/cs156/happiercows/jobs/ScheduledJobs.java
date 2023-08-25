@@ -51,7 +51,7 @@ public class ScheduledJobs {
     public void runMilkTheCowsJobBasedOnCron() {
        log.info("runMilkTheCowsJobBasedOnCron: running");
 
-       JobContextConsumer milkTheCowsJob = milkTheCowsJobFactory.create();
+       JobContextConsumer milkTheCowsJob = milkTheCowsJobFactory.create(null);
        jobService.runAsJob(milkTheCowsJob);
     
        log.info("runMilkTheCowsJobBasedOnCron: launched job");

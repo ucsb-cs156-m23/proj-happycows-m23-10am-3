@@ -1,6 +1,8 @@
 package edu.ucsb.cs156.happiercows.jobs;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Optional;
 
 import edu.ucsb.cs156.happiercows.entities.Commons;
 import edu.ucsb.cs156.happiercows.entities.Profit;
@@ -26,6 +28,8 @@ public class MilkTheCowsJob implements JobContextConsumer {
     private UserRepository userRepository;
     @Getter
     private ProfitRepository profitRepository;
+    @Getter
+    private Long targetCommonsId; 
 
     public String formatDollars(double amount) {
         return  String.format("$%.2f", amount);
@@ -35,9 +39,23 @@ public class MilkTheCowsJob implements JobContextConsumer {
     public void accept(JobContext ctx) throws Exception {
         ctx.log("Starting to milk the cows");
 
-        Iterable<Commons> allCommons = commonsRepository.findAll();
+        // Iterable<Commons> allCommons = commonsRepository.findAll();
+        Iterable<Commons> commonsList;
 
-        for (Commons commons : allCommons) {
+        if (targetCommonsId != null){
+            Commons targetCommons = commonsRepository.findById(targetCommonsId).orElse(null);
+            
+            if (targetCommons != null){
+                commonsList = Collections.singletonList(targetCommons);
+            }else{
+                ctx.log("Target Commons Id Not Found");
+                return;
+            }
+        }else{
+            commonsList = commonsRepository.findAll();
+        }
+
+        for (Commons commons : commonsList) {
             String name = commons.getName();
             double milkPrice = commons.getMilkPrice();
             ctx.log("Milking cows for Commons: " + name + ", Milk Price: " + formatDollars(milkPrice));

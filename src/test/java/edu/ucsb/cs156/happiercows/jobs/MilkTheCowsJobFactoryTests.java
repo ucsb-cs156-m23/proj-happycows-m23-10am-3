@@ -37,7 +37,7 @@ public class MilkTheCowsJobFactoryTests {
     void test_create() throws Exception {
 
         // Act
-        MilkTheCowsJob milkTheCowsJob = (MilkTheCowsJob) MilkTheCowsJobFactory.create();
+        MilkTheCowsJob milkTheCowsJob = (MilkTheCowsJob) MilkTheCowsJobFactory.create(null);
 
         // Assert
         assertEquals(commonsRepository,milkTheCowsJob.getCommonsRepository());
