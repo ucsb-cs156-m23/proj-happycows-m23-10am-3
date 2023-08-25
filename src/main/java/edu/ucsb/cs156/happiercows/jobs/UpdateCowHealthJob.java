@@ -12,7 +12,6 @@ import edu.ucsb.cs156.happiercows.strategies.CowHealthUpdateStrategy;
 
 import java.util.Optional;
 
-import edu.ucsb.cs156.happiercows.controllers.CommonsController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
