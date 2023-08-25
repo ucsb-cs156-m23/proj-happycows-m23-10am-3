@@ -5,8 +5,17 @@ import { cellToAxiosParamsDelete, onDeleteSuccess } from "main/utils/commonsUtil
 import { useNavigate } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
 
-export default function CommonsTable({ commons, currentUser }) {
+import { useState } from 'react';
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 
+export default function CommonsTable({ commons, currentUser }) {
+    const [show, setShow] = useState(false);
+    const [cellDelete, setCellDelete] = useState(null);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
     const navigate = useNavigate();
 
     const editCallback = (cell) => {
@@ -20,8 +29,33 @@ export default function CommonsTable({ commons, currentUser }) {
     );
 
     const deleteCallback = async (cell) => { 
-        deleteMutation.mutate(cell); 
+        setCellDelete(cell);
+        handleShow();
     }
+
+    const confirmDelete = async (cell) => {
+        deleteMutation.mutate(cell); 
+        handleClose();
+    }
+
+    const commonsTableModal = (
+    <Modal data-testid="CommonsTable-Modal" show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+            <Modal.Title>Warning! You are about to delete a Commons! </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            Click "Yes" if you want to delete this commons. Click "No" if you don't want to delete this commons.       
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary" data-testid="CommonsTable-Modal-YesDelete" onClick={() => confirmDelete(cellDelete)}>
+                Yes, delete this commons.
+            </Button>
+            <Button variant="secondary" data-testid="CommonsTable-Modal-NoDelete" onClick={() => setShow(false)}>
+                No, I don't want to delete this commons. 
+            </Button>
+        </Modal.Footer>
+    </Modal> 
+    );
 
     const leaderboardCallback = (cell) => {
         navigate(`/leaderboard/${cell.row.values["commons.id"]}`)
@@ -97,9 +131,14 @@ export default function CommonsTable({ commons, currentUser }) {
 
     const columnsToDisplay = hasRole(currentUser,"ROLE_ADMIN") ? columnsIfAdmin : columns;
 
-    return <OurTable
-        data={commons}
-        columns={columnsToDisplay}
-        testid={testid}
-    />;
+    return (
+        <>
+            <OurTable
+                data={commons}
+                columns={columnsToDisplay}
+                testid={testid}
+            />
+            {hasRole(currentUser,"ROLE_ADMIN") && commonsTableModal}
+        </>
+    );
 };
