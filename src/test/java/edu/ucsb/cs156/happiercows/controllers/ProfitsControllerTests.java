@@ -99,4 +99,5 @@ public class ProfitsControllerTests extends ControllerTestCase {
                 json.get("message"));
     }
 
+    
 }
