@@ -1,4 +1,4 @@
-import { screen, waitFor, render } from "@testing-library/react";
+import { fireEvent, screen, waitFor, render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +11,7 @@ import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 
 const mockToast = jest.fn();
 jest.mock('react-toastify', () => {
+    
     const originalModule = jest.requireActual('react-toastify');
     return {
         __esModule: true,
@@ -49,6 +50,23 @@ describe("LeaderboardPage tests", () => {
         axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.adminUser);
         axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
     };
+
+    test("that navigate(-1) is called when Back is clicked", async () => {
+        const queryClient = new QueryClient();
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <LeaderboardPage />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+        expect(await screen.findByTestId(`LeaderboardPage-back-button`)).toBeInTheDocument();
+        const backButton = screen.getByTestId(`LeaderboardPage-back-button`);
+
+        fireEvent.click(backButton);
+
+        await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith(-1));
+    });
 
     test("renders without crashing for users", async () => {
         setupUser();
