@@ -281,7 +281,7 @@ public class CommonsController extends ApiController {
         Optional<Integer> numCows = commonsRepository.getNumCows(c.getId());
         Optional<Integer> numUsers = commonsRepository.getNumUsers(c.getId());
 
-        int effectiveCapacity = c.computeEffectiveCapacity();
+        int effectiveCapacity = Commons.computeEffectiveCapacity(c,commonsRepository);
 
         return CommonsPlus.builder()
                 .commons(c)

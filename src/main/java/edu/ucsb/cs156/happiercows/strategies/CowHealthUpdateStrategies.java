@@ -2,6 +2,7 @@ package edu.ucsb.cs156.happiercows.strategies;
 
 import edu.ucsb.cs156.happiercows.entities.Commons;
 import edu.ucsb.cs156.happiercows.entities.UserCommons;
+import edu.ucsb.cs156.happiercows.repositories.CommonsRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,14 +19,14 @@ public enum CowHealthUpdateStrategies implements CowHealthUpdateStrategy {
 
     Linear("Linear", "Cow health increases/decreases proportionally to the number of cows over/under the carrying capacity.") {
         @Override
-        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows) {
-            return user.getCowHealth() - (totalCows - commons.computeEffectiveCapacity()) * commons.getDegradationRate();
+        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows, CommonsRepository commonsRepository) {
+            return user.getCowHealth() - (totalCows - Commons.computeEffectiveCapacity(commons, commonsRepository)) * commons.getDegradationRate();
         }
     },
     Constant("Constant", "Cow health changes increases/decreases by the degradation rate, depending on if the number of cows exceeds the carrying capacity.") {
         @Override
-        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows) {
-            if (totalCows <= commons.computeEffectiveCapacity()) {
+        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows, CommonsRepository commonsRepository) {
+            if (totalCows <= Commons.computeEffectiveCapacity(commons, commonsRepository)) {
                 return user.getCowHealth() + commons.getDegradationRate();
             } else {
                 return user.getCowHealth() - commons.getDegradationRate();
@@ -34,7 +35,7 @@ public enum CowHealthUpdateStrategies implements CowHealthUpdateStrategy {
     },
     Noop("Do nothing", "Cow health does not change.") {
         @Override
-        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows) {
+        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows, CommonsRepository commonsRepository) {
             return user.getCowHealth();
         }
     };

@@ -155,24 +155,26 @@ public class UpdateCowHealthJobTests {
         @Test
         void test_cow_health_minimum_is_0() throws Exception {
                 var mockStrategy = mock(CowHealthUpdateStrategy.class);
-                when(mockStrategy.calculateNewCowHealth(any(), any(), anyInt())).thenReturn(-1.0);
+                when(mockStrategy.calculateNewCowHealth(any(), any(), anyInt(), any())).thenReturn(-1.0);
                 var newHealth = UpdateCowHealthJob.calculateNewCowHealthUsingStrategy(
                                 mockStrategy,
                                 commons,
                                 userCommons,
-                                1);
+                                1,
+                                commonsRepository);
                 assertEquals(0.0, newHealth);
         }
 
         @Test
         void test_cow_health_maximum_is_100() throws Exception {
                 var mockStrategy = mock(CowHealthUpdateStrategy.class);
-                when(mockStrategy.calculateNewCowHealth(any(), any(), anyInt())).thenReturn(101.0);
+                when(mockStrategy.calculateNewCowHealth(any(), any(), anyInt(), any())).thenReturn(101.0);
                 var newHealth = UpdateCowHealthJob.calculateNewCowHealthUsingStrategy(
                                 mockStrategy,
                                 commons,
                                 userCommons,
-                                1);
+                                1,
+                                commonsRepository);
                 assertEquals(100.0, newHealth);
         }
 

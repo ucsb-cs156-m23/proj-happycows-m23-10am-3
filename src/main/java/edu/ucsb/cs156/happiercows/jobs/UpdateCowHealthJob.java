@@ -27,9 +27,9 @@ public class UpdateCowHealthJob implements JobContextConsumer {
         ctx.log("Updating cow health...");
 
         Iterable<Commons> allCommons = commonsRepository.findAll();
-
+        
         for (Commons commons : allCommons) {
-            ctx.log("Commons " + commons.getName() + ", degradationRate: " + commons.getDegradationRate() + ", effectiveCapacity: " + commons.computeEffectiveCapacity());
+            ctx.log("Commons " + commons.getName() + ", degradationRate: " + commons.getDegradationRate() + ", effectiveCapacity: " + Commons.computeEffectiveCapacity(commons, commonsRepository));
             int numUsers = commonsRepository.getNumUsers(commons.getId()).orElseThrow(() -> new RuntimeException("Error calling getNumUsers(" + commons.getId() + ")"));
 
             if (numUsers==0) {
@@ -37,7 +37,7 @@ public class UpdateCowHealthJob implements JobContextConsumer {
                 continue;
             }
 
-            int carryingCapacity = commons.computeEffectiveCapacity();
+            int carryingCapacity = Commons.computeEffectiveCapacity(commons, commonsRepository);
             Iterable<UserCommons> allUserCommons = userCommonsRepository.findByCommonsId(commons.getId());
 
             Integer totalCows = commonsRepository.getNumCows(commons.getId()).orElseThrow(() -> new RuntimeException("Error calling getNumCows(" + commons.getId() + ")"));
@@ -47,7 +47,7 @@ public class UpdateCowHealthJob implements JobContextConsumer {
 
             for (UserCommons userCommons : allUserCommons) {
                 User user = userCommons.getUser();
-                var newCowHealth = calculateNewCowHealthUsingStrategy(cowHealthUpdateStrategy, commons, userCommons, totalCows);
+                var newCowHealth = calculateNewCowHealthUsingStrategy(cowHealthUpdateStrategy, commons, userCommons, totalCows, commonsRepository);
                 ctx.log("User: " + user.getFullName() + ", numCows: " + userCommons.getNumOfCows() + ", cowHealth: " + userCommons.getCowHealth());
 
                 double oldHealth = userCommons.getCowHealth();
@@ -67,9 +67,10 @@ public class UpdateCowHealthJob implements JobContextConsumer {
             CowHealthUpdateStrategy strategy,
             Commons commons,
             UserCommons userCommons,
-            int totalCows
+            int totalCows,
+            CommonsRepository commonsRepository
     ) {
-        var health = strategy.calculateNewCowHealth(commons, userCommons, totalCows);
+        var health = strategy.calculateNewCowHealth(commons, userCommons, totalCows, commonsRepository);
         return Math.max(0, Math.min(health, 100));
     }
 
