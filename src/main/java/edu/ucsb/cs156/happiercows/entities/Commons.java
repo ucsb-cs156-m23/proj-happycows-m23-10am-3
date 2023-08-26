@@ -1,5 +1,6 @@
 package edu.ucsb.cs156.happiercows.entities;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.ucsb.cs156.happiercows.strategies.CowHealthUpdateStrategies;
@@ -45,4 +46,10 @@ public class Commons {
     @OneToMany(mappedBy = "commons", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<UserCommons> joinedUsers;
+
+    @JsonGetter("effectiveCapacity")
+    public int computeEffectiveCapacity(){
+        int numUsers = (joinedUsers != null) ? joinedUsers.size():0;
+        return Math.max(capacityPerUser * numUsers, carryingCapacity);
+    }
 }
