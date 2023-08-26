@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.io.StringReader;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -619,14 +620,17 @@ public class CommonsControllerTests extends ControllerTestCase {
     @WithMockUser(roles = {"USER"})
     @Test
     public void getCommonsPlusByIdTest_valid() throws Exception {
+
         Commons Commons1 = Commons.builder()
                 .name("TestCommons2")
                 .id(18L)
+                .carryingCapacity(100)
                 .build();
         CommonsPlus commonsPlus = CommonsPlus.builder()
                 .commons(Commons1)
                 .totalCows(5)
                 .totalUsers(2)
+                .effectiveCapacity(100)
                 .build();
                 
         when(commonsRepository.findById(eq(18L))).thenReturn(Optional.of(Commons1));
@@ -891,7 +895,8 @@ public class CommonsControllerTests extends ControllerTestCase {
     @Test
     public void getCommonsPlusTest() throws Exception {
         List<Commons> expectedCommons = new ArrayList<>();
-        Commons Commons1 = Commons.builder().name("TestCommons1").id(1L).build();
+
+        Commons Commons1 = Commons.builder().name("TestCommons1").id(1L).carryingCapacity(100).build();
         expectedCommons.add(Commons1);
 
         List<CommonsPlus> expectedCommonsPlus = new ArrayList<>();
@@ -899,7 +904,10 @@ public class CommonsControllerTests extends ControllerTestCase {
                 .commons(Commons1)
                 .totalCows(50)
                 .totalUsers(20)
+                .effectiveCapacity(100)
                 .build();
+
+
 
         expectedCommonsPlus.add(CommonsPlus1);
         when(commonsRepository.findAll()).thenReturn(expectedCommons);

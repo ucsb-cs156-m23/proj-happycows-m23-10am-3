@@ -1,7 +1,10 @@
 package edu.ucsb.cs156.happiercows.entities;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import edu.ucsb.cs156.happiercows.repositories.CommonsRepository;
 import edu.ucsb.cs156.happiercows.strategies.CowHealthUpdateStrategies;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +12,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,4 +51,11 @@ public class Commons {
     @OneToMany(mappedBy = "commons", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<UserCommons> joinedUsers;
+
+
+    public static int computeEffectiveCapacity(Commons commons, CommonsRepository commonsRepository) {
+        int numUsers = (commonsRepository.getNumUsers(commons.getId())).orElse(0);
+        return Math.max(commons.getCapacityPerUser() * numUsers, commons.getCarryingCapacity());
+    }
+
 }
