@@ -281,11 +281,14 @@ import java.util.stream.Collectors;
 <span class="fc" id="L281">        Optional&lt;Integer&gt; numCows = commonsRepository.getNumCows(c.getId());</span>
 <span class="fc" id="L282">        Optional&lt;Integer&gt; numUsers = commonsRepository.getNumUsers(c.getId());</span>
 
-<span class="fc" id="L284">        return CommonsPlus.builder()</span>
-<span class="fc" id="L285">                .commons(c)</span>
-<span class="fc" id="L286">                .totalCows(numCows.orElse(0))</span>
-<span class="fc" id="L287">                .totalUsers(numUsers.orElse(0))</span>
-<span class="fc" id="L288">                .build();</span>
+<span class="fc" id="L284">        int effectiveCapacity = Commons.computeEffectiveCapacity(c,commonsRepository);</span>
+
+<span class="fc" id="L286">        return CommonsPlus.builder()</span>
+<span class="fc" id="L287">                .commons(c)</span>
+<span class="fc" id="L288">                .totalCows(numCows.orElse(0))</span>
+<span class="fc" id="L289">                .totalUsers(numUsers.orElse(0))</span>
+<span class="fc" id="L290">                .effectiveCapacity(effectiveCapacity)</span>
+<span class="fc" id="L291">                .build();</span>
     }
 
     @Operation(summary=&quot;Download CSV file for common stats for a given Commons ID&quot;)
@@ -294,17 +297,17 @@ import java.util.stream.Collectors;
     public ResponseEntity&lt;InputStreamResource&gt; downloadCommonStats(
             @Parameter(name = &quot;commonsId&quot;) @RequestParam Long commonsId) throws IOException{
 
-<span class="fc" id="L297">        Iterable&lt;CommonStats&gt; commonStatsList = commonStatsRepository.findAllByCommonsId(commonsId);</span>
+<span class="fc" id="L300">        Iterable&lt;CommonStats&gt; commonStatsList = commonStatsRepository.findAllByCommonsId(commonsId);</span>
 
-<span class="fc" id="L299">        String filename = String.format(&quot;commonStats%05d.csv&quot;,commonsId);</span>
+<span class="fc" id="L302">        String filename = String.format(&quot;commonStats%05d.csv&quot;,commonsId);</span>
 
-<span class="fc" id="L301">        ByteArrayInputStream bais = CommonStatsCSVHelper.toCSV(commonStatsList);</span>
-<span class="fc" id="L302">        InputStreamResource isr = new InputStreamResource(bais);</span>
+<span class="fc" id="L304">        ByteArrayInputStream bais = CommonStatsCSVHelper.toCSV(commonStatsList);</span>
+<span class="fc" id="L305">        InputStreamResource isr = new InputStreamResource(bais);</span>
 
-<span class="fc" id="L304">        return ResponseEntity.ok()</span>
-<span class="fc" id="L305">                .header(HttpHeaders.CONTENT_DISPOSITION, &quot;attachment; filename=&quot; + filename)</span>
-<span class="fc" id="L306">                .contentType(MediaType.parseMediaType(&quot;application/csv&quot;))</span>
-<span class="fc" id="L307">                .body(isr);</span>
+<span class="fc" id="L307">        return ResponseEntity.ok()</span>
+<span class="fc" id="L308">                .header(HttpHeaders.CONTENT_DISPOSITION, &quot;attachment; filename=&quot; + filename)</span>
+<span class="fc" id="L309">                .contentType(MediaType.parseMediaType(&quot;application/csv&quot;))</span>
+<span class="fc" id="L310">                .body(isr);</span>
     }
 
 

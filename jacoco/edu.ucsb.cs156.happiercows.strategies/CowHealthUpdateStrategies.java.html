@@ -2,6 +2,7 @@
 
 import edu.ucsb.cs156.happiercows.entities.Commons;
 import edu.ucsb.cs156.happiercows.entities.UserCommons;
+import edu.ucsb.cs156.happiercows.repositories.CommonsRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,37 +13,37 @@ import lombok.Getter;
  * which are far more powerful in Java than enums in most other languages.
  */
 
-<span class="fc" id="L15">@Getter</span>
+<span class="fc" id="L16">@Getter</span>
 @AllArgsConstructor
 public enum CowHealthUpdateStrategies implements CowHealthUpdateStrategy {
 
-<span class="fc" id="L19">    Linear(&quot;Linear&quot;, &quot;Cow health increases/decreases proportionally to the number of cows over/under the carrying capacity.&quot;) {</span>
+<span class="fc" id="L20">    Linear(&quot;Linear&quot;, &quot;Cow health increases/decreases proportionally to the number of cows over/under the carrying capacity.&quot;) {</span>
         @Override
-        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows) {
-<span class="fc" id="L22">            return user.getCowHealth() - (totalCows - commons.getCarryingCapacity()) * commons.getDegradationRate();</span>
+        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows, CommonsRepository commonsRepository) {
+<span class="fc" id="L23">            return user.getCowHealth() - (totalCows - Commons.computeEffectiveCapacity(commons, commonsRepository)) * commons.getDegradationRate();</span>
         }
     },
-<span class="fc" id="L25">    Constant(&quot;Constant&quot;, &quot;Cow health changes increases/decreases by the degradation rate, depending on if the number of cows exceeds the carrying capacity.&quot;) {</span>
+<span class="fc" id="L26">    Constant(&quot;Constant&quot;, &quot;Cow health changes increases/decreases by the degradation rate, depending on if the number of cows exceeds the carrying capacity.&quot;) {</span>
         @Override
-        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows) {
-<span class="fc bfc" id="L28" title="All 2 branches covered.">            if (totalCows &lt;= commons.getCarryingCapacity()) {</span>
-<span class="fc" id="L29">                return user.getCowHealth() + commons.getDegradationRate();</span>
+        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows, CommonsRepository commonsRepository) {
+<span class="fc bfc" id="L29" title="All 2 branches covered.">            if (totalCows &lt;= Commons.computeEffectiveCapacity(commons, commonsRepository)) {</span>
+<span class="fc" id="L30">                return user.getCowHealth() + commons.getDegradationRate();</span>
             } else {
-<span class="fc" id="L31">                return user.getCowHealth() - commons.getDegradationRate();</span>
+<span class="fc" id="L32">                return user.getCowHealth() - commons.getDegradationRate();</span>
             }
         }
     },
-<span class="fc" id="L35">    Noop(&quot;Do nothing&quot;, &quot;Cow health does not change.&quot;) {</span>
+<span class="fc" id="L36">    Noop(&quot;Do nothing&quot;, &quot;Cow health does not change.&quot;) {</span>
         @Override
-        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows) {
-<span class="fc" id="L38">            return user.getCowHealth();</span>
+        public double calculateNewCowHealth(Commons commons, UserCommons user, int totalCows, CommonsRepository commonsRepository) {
+<span class="fc" id="L39">            return user.getCowHealth();</span>
         }
     };
 
     private final String displayName;
     private final String description;
 
-<span class="fc" id="L45">    public final static CowHealthUpdateStrategies DEFAULT_ABOVE_CAPACITY = Linear;</span>
-<span class="fc" id="L46">    public final static CowHealthUpdateStrategies DEFAULT_BELOW_CAPACITY = Constant;</span>
+<span class="fc" id="L46">    public final static CowHealthUpdateStrategies DEFAULT_ABOVE_CAPACITY = Linear;</span>
+<span class="fc" id="L47">    public final static CowHealthUpdateStrategies DEFAULT_BELOW_CAPACITY = Constant;</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
