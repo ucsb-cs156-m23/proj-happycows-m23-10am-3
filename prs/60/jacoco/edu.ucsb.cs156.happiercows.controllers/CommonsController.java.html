@@ -281,7 +281,7 @@ import java.util.stream.Collectors;
 <span class="fc" id="L281">        Optional&lt;Integer&gt; numCows = commonsRepository.getNumCows(c.getId());</span>
 <span class="fc" id="L282">        Optional&lt;Integer&gt; numUsers = commonsRepository.getNumUsers(c.getId());</span>
 
-<span class="fc" id="L284">        int effectiveCapacity = c.computeEffectiveCapacity();</span>
+<span class="fc" id="L284">        int effectiveCapacity = Commons.computeEffectiveCapacity(c,commonsRepository);</span>
 
 <span class="fc" id="L286">        return CommonsPlus.builder()</span>
 <span class="fc" id="L287">                .commons(c)</span>
