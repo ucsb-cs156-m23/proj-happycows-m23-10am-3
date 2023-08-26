@@ -87,8 +87,9 @@ describe("AdminCreateCommonsPage tests", () => {
         const startDateField = screen.getByLabelText("Starting Date");
         const degradationRateField = screen.getByLabelText("Degradation Rate");
         const carryingCapacityField = screen.getByLabelText("Carrying Capacity");
-        const aboveCapacityHealthUpdateStrategyField = screen.getByLabelText("When above capacity");
-        const belowCapacityHealthUpdateStrategyField = screen.getByLabelText("When below capacity");
+        const capacityPerUserField = screen.getByLabelText("Capacity Per User");
+        const aboveCapacityHealthUpdateStrategyField = screen.getByLabelText("When Above Capacity");
+        const belowCapacityHealthUpdateStrategyField = screen.getByLabelText("When Below Capacity");
         const showLeaderboardField = screen.getByLabelText("Show Leaderboard?");
         const button = screen.getByTestId("CommonsForm-Submit-Button");
 
@@ -99,6 +100,7 @@ describe("AdminCreateCommonsPage tests", () => {
         fireEvent.change(startDateField, { target: { value: "2023-08-20" } })
         fireEvent.change(degradationRateField, { target: { value: '30.4' } })
         fireEvent.change(carryingCapacityField, { target: { value: '25' } })
+        fireEvent.change(capacityPerUserField, { target: { value: '5' } })
         fireEvent.change(showLeaderboardField, { target: { value: true } })
 
         fireEvent.change(aboveCapacityHealthUpdateStrategyField, { target: {value: 'strat2' } })
@@ -119,6 +121,7 @@ describe("AdminCreateCommonsPage tests", () => {
             startingDate: "2023-08-20T00:00:00.000Z", // [1]
             degradationRate: 30.4,
             carryingCapacity: 25,
+            capacityPerUser: 5,
             showLeaderboard: false,
             aboveCapacityHealthUpdateStrategy: "strat2",
             belowCapacityHealthUpdateStrategy: "strat3",
