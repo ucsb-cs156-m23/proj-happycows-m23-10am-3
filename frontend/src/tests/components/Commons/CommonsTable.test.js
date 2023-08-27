@@ -76,8 +76,8 @@ describe("UserTable tests", () => {
 
     );
 
-    const expectedHeaders = ["id", "Name", "Cow Price", 'Milk Price', 'Starting Balance', 'Starting Date', 'Degradation Rate', 'Carrying Capacity', 'Cows', 'Show Leaderboard?'];
-    const expectedFields = ["id", "name", "cowPrice", "milkPrice", "startingBalance", "startingDate", "degradationRate", "carryingCapacity"];
+    const expectedHeaders = ["id", "Name", "Cow Price", 'Milk Price', 'Starting Balance', 'Starting Date', 'Degradation Rate', 'Carrying Capacity', 'Capacity Per User', 'Effective Capacity', 'Cows', 'Show Leaderboard?'];
+    const expectedFields = ["id", "name", "cowPrice", "milkPrice", "startingBalance", "startingDate", "degradationRate", "carryingCapacity", "capacityPerUser"];
     const testId = "CommonsTable";
 
     expectedHeaders.forEach((headerText) => {
@@ -99,10 +99,12 @@ describe("UserTable tests", () => {
     expect(screen.getByTestId(`${testId}-cell-row-1-col-commons.milkPrice`)).toHaveTextContent("2");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-commons.degradationRate`)).toHaveTextContent("0.01");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-commons.carryingCapacity`)).toHaveTextContent("42");
+    expect(screen.getByTestId(`${testId}-cell-row-1-col-commons.capacityPerUser`)).toHaveTextContent("20")
     expect(screen.getByTestId(`${testId}-cell-row-1-col-commons.startingBalance`)).toHaveTextContent("10");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-commons.startingDate`)).toHaveTextContent(/^2022-11-22$/); // regex so that we have an exact match https://stackoverflow.com/a/73298371
     expect(screen.getByTestId(`${testId}-cell-row-1-col-commons.showLeaderboard`)).toHaveTextContent("true");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-totalCows`)).toHaveTextContent("0");
+    expect(screen.getByTestId(`${testId}-cell-row-1-col-effectiveCapacity`)).toHaveTextContent("42");
 
     expect(screen.getByTestId(`${testId}-cell-row-0-col-Edit-button`)).toHaveClass("btn-primary");
     expect(screen.getByTestId(`${testId}-cell-row-0-col-Delete-button`)).toHaveClass("btn-danger");
@@ -122,6 +124,8 @@ describe("CommonsTable Modal tests", () => {
 
   afterEach(() => { jest.clearAllMocks() });
   
+  const testId = "CommonsTable";
+
   test("Renders without crashing for empty table with user not logged in", () => {
     const currentUser = null;
 
@@ -151,6 +155,7 @@ describe("CommonsTable Modal tests", () => {
       expect(document.body).not.toHaveClass('modal-open');
     });
 
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Delete-button`)).toHaveClass("btn-danger");
     const deleteButton = screen.getByTestId("CommonsTable-cell-row-0-col-Delete-button");
     fireEvent.click(deleteButton);
 
@@ -173,7 +178,7 @@ describe("CommonsTable Modal tests", () => {
       </QueryClientProvider>
     );
 
-
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Delete-button`)).toHaveClass("btn-danger");
     const deleteButton = screen.getByTestId("CommonsTable-cell-row-0-col-Delete-button");
     fireEvent.click(deleteButton);
 
@@ -191,7 +196,7 @@ describe("CommonsTable Modal tests", () => {
     await waitFor(() => { expect(document.body).not.toHaveClass('modal-open') });
   });
 
-  test("Clicking no in the modal popup deletes the commons", async () => {
+  test("Clicking no in the modal popup does not delete the commons", async () => {
     const currentUser = currentUserFixtures.adminUser;
 
     render(
@@ -202,6 +207,7 @@ describe("CommonsTable Modal tests", () => {
       </QueryClientProvider>
     );
 
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Delete-button`)).toHaveClass("btn-danger");
     const deleteButton = screen.getByTestId("CommonsTable-cell-row-0-col-Delete-button");
     fireEvent.click(deleteButton);
 
@@ -224,7 +230,7 @@ describe("CommonsTable Modal tests", () => {
       </QueryClientProvider>
     );
   
-
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-Delete-button`)).toHaveClass("btn-danger");
     const deleteButton = screen.getByTestId("CommonsTable-cell-row-0-col-Delete-button");
     fireEvent.click(deleteButton);
   
