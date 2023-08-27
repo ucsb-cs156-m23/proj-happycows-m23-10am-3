@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-m23/proj-happycows-m23-10am-3
 owner: ucsb-cs156-m23
 repo_name: proj-happycows-m23-10am-3
-pull_requests: [{"author":{"id":"MDQ6VXNlcjU4NDkyMDc2","is_bot":false,"login":"ryan-he-8","name":"Ryan He"},"headRefName":"Ryan-ListCommons","number":62,"title":"List commons shows capacityPerUser and effectiveCapacity","url":"https://github.com/ucsb-cs156-m23/proj-happycows-m23-10am-3/pull/62"}]
+pull_requests: []
